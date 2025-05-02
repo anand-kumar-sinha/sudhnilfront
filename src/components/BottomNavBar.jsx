@@ -1,51 +1,78 @@
-import React from "react";
-import { GoHome } from "react-icons/go";
-import { CiSearch } from "react-icons/ci";
-import { assets } from "../assets/assets";
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { ShopContext } from '../context/ShopContext';
 
 const BottomNavBar = () => {
+  const { setShowSearch } = useContext(ShopContext);
+
   return (
-    <div className="fixed bottom-[60px] left-1/2 transform -translate-x-1/2 w-full max-w-[800px] px-4">
-      <div className="flex justify-between bg-white shadow-lg rounded-full p-3 border border-gray-200">
-        <button className="flex flex-col items-center text-sm text-gray-700">
-          <span>
-            <GoHome size={25}/>
-          </span>
+    <div className="fixed bottom-0 left-0 right-0 w-full bg-white/80 backdrop-blur-md shadow-inner border-t border-gray-200 z-50">
+      {/* BottomNavBar container for all screen sizes */}
+      <div className="flex justify-between items-center px-4 py-2 text-xs text-gray-700 md:hidden">
+        {/* Mobile layout */}
+        <Link to="/" className="flex flex-col items-center hover:text-blue-600">
+          <span>🏠</span>
           <span>Home</span>
-        </button>
-        <button className="flex flex-col items-center text-sm text-gray-700">
-          <span>
-            <img
-              onClick={() => setShowSearch(true)}
-              src={assets.search_icon}
-              className="w-5 cursor-pointer"
-              alt=""
-            />
-          </span>
+        </Link>
+        <Link to="/collection" className="flex flex-col items-center hover:text-blue-600">
+          <span>🛒</span>
+          <span>Shop</span>
+        </Link>
+        <Link
+          to="/cart"
+          className="flex flex-col items-center justify-center hover:text-blue-600"
+        >
+          <span>➕</span>
+          <span>Add</span>
+        </Link>
+        <button
+          className="flex flex-col items-center hover:text-blue-600"
+          onClick={() => setShowSearch(true)}
+        >
+          <span>🔍</span>
           <span>Search</span>
         </button>
-
-        <button className="flex flex-col items-center text-sm text-gray-700">
-          <span>
-            {" "}
-            <img src={assets.cart_icon} className="w-5 min-w-5" alt="" />
-          </span>
-          <span>Cart</span>
-        </button>
-        <button className="flex flex-col items-center text-sm text-gray-700">
-          <span>
-            <img
-              onClick={() => (token ? null : navigate("/login"))}
-              src={assets.profile_icon}
-              className="w-5 cursor-pointer"
-              alt=""
-            />
-          </span>
+        <Link to="/profile" className="flex flex-col items-center hover:text-blue-600">
+          <span>👤</span>
           <span>Profile</span>
+        </Link>
+      </div>
+
+      {/* Desktop layout */}
+      <div className="hidden md:flex justify-between items-center px-10 py-4 text-xs text-gray-700">
+        <Link to="/" className="flex flex-col items-center hover:text-blue-600">
+          <span>🏠</span>
+          <span>Home</span>
+        </Link>
+        <Link to="/collection" className="flex flex-col items-center hover:text-blue-600">
+          <span>🛒</span>
+          <span>Shop</span>
+        </Link>
+        <Link
+          to="/cart"
+          className="flex flex-col items-center justify-center hover:text-blue-600"
+        >
+          <span>➕</span>
+          <span>Add</span>
+        </Link>
+        <button
+          className="flex flex-col items-center hover:text-blue-600"
+          onClick={() => setShowSearch(true)}
+        >
+          <span>🔍</span>
+          <span>Search</span>
         </button>
+        <Link to="/profile" className="flex flex-col items-center hover:text-blue-600">
+          <span>👤</span>
+          <span>Profile</span>
+        </Link>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default BottomNavBar;
+export default BottomNavBar
+
+
+
+
