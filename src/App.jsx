@@ -1,14 +1,14 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "./pages/home";
-import Collection from "./pages/collection";
-import About from "./pages/about";
-import Contact from "./pages/contact";
-import Product from "./pages/Product";
-import Cart from "./pages/cart";
-import Login from "./pages/login";
-import PlaceOrder from "./pages/PlaceOrder";
-import Orders from "./pages/Orders";
-import Verify from "./pages/Verify";
+import Home from "./pages/Home.jsx";
+import Collection from "./pages/Collection.jsx";
+import About from "./pages/About.jsx";
+import Contact from "./pages/Collection.jsx";
+import Product from "./pages/Product.jsx";
+import Cart from "./pages/Cart.jsx";
+import Login from "./pages/Login.jsx";
+import PlaceOrder from "./pages/PlaceOrder.jsx";
+import Orders from "./pages/Orders.jsx";
+import Verify from "./pages/Verify.jsx";
 
 const App = () => {
   return (
