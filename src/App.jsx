@@ -18,7 +18,7 @@ import BottomNavBar from "./components/BottomNavBar";
 
 const App = () => {
   return (
-    <div className="px-4 sm:px-5[vw] md:px-7[vw] lg:px-[9vw]">
+    <div className="px-4 sm:px-5[vw] md:px-7[vw] lg:px-[9vw] mb-6">
       {/* we are adding nav bar on top so it is available on all pages */}
       <ToastContainer />
       <Navbar />
