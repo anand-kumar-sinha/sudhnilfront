@@ -12,7 +12,11 @@ const Home = () => {
     <div>
       <Hero/>
       <LatestCollection/>
+<<<<<<< HEAD
       <Category/>
+=======
+      <Category />
+>>>>>>> 828bfe0b05ebb0e541b55369030c4f24fb89aa92
       <BestSeller/>
       <OurPolicy/>
       <NewsLetterBox/>
