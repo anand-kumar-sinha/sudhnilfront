@@ -22,6 +22,9 @@ const Contact = () => {
       </div>
      <NewsletterBox/>
     </div>
+
+
+
   )
 }
 
