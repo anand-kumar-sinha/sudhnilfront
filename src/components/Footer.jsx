@@ -30,7 +30,7 @@ const Footer = () => {
           <h2 className="font-semibold mb-4 text-lg">Customer Support</h2>
           <ul className="space-y-2 text-sm text-gray-300">
             <li><a href="#" className="hover:text-white">Help Center</a></li>
-            <li><a href="#" className="hover:text-white">Returns</a></li>
+            <li><a href="#" className="hover:text-white">Returns policy</a></li>
             <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
             <li><a href="#" className="hover:text-white">Terms & Conditions</a></li>
           </ul>
