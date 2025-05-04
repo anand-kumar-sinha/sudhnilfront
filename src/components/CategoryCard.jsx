@@ -13,6 +13,7 @@ const CategoryCard = ({category}) => {
       />
       <div className="p-4">
         <h3 className="text-lg font-semibold text-gray-800">{category?.categoryName}</h3>
+        
       </div>
     </div>
   );
