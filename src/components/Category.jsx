@@ -18,7 +18,7 @@ const Category = () => {
               categories
                 ?.slice(0, 4)
                 .map((category) => (
-                  <CategoryCard key={category._id} category={category} />
+                  <CategoryCard key={category._id} data={category} />
                 ))}
           </div>
         </div>

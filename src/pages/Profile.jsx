@@ -14,7 +14,7 @@ import {
 } from 'react-icons/fi';
 
 const Profile = () => {
-  const { token, setToken, setCartItems } = useContext(ShopContext);
+  const { token, setToken, setCartItems, user } = useContext(ShopContext);
   const navigate = useNavigate();
 
   const logOut = () => {
@@ -27,7 +27,6 @@ const Profile = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       <div className="bg-white shadow-xl rounded-xl p-8 border border-gray-200 space-y-10">
-
         {/* Profile Info */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
@@ -37,8 +36,8 @@ const Profile = () => {
               className="w-16 h-16 rounded-full border"
             />
             <div>
-              <h2 className="text-2xl font-semibold text-gray-800">Hello, Priya</h2>
-              <p className="text-sm text-gray-500">priyakumarinwd100@gmail.com</p>
+              <h2 className="text-2xl font-semibold text-gray-800">Hello, {user?.name}</h2>
+              <p className="text-sm text-gray-500">{user?.email}</p>
             </div>
           </div>
 

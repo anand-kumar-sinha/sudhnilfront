@@ -117,7 +117,6 @@ const ShopContextProvider = (props) => {
         { headers: { token } }
       );
       if (response.data.success) {
-        console.log(response.data)
         setCategories(response.data.category);
         return response.data;
       }
@@ -220,6 +219,7 @@ const ShopContextProvider = (props) => {
     token,
     setToken,
     categories,
+    user
   };
   return (
     <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>
