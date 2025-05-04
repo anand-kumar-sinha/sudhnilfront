@@ -190,6 +190,7 @@ const ShopContextProvider = (props) => {
   useEffect(() => {
     getProductsData();
     getBannersData();
+    fetchCategory();
   }, []);
 
   useEffect(() => {
@@ -197,7 +198,6 @@ const ShopContextProvider = (props) => {
       setToken(localStorage.getItem("token"));
       getUserCart(localStorage.getItem("token"));
       fetchUser(localStorage.getItem("token"));
-      fetchCategory();
     }
   }, []);
   const value = {
