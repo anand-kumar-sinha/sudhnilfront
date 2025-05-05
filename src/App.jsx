@@ -12,6 +12,7 @@ import Orders from "./pages/Orders";
 import Verify from "./pages/Verify";
 import Profile from './pages/Profile';
 import NotFound from "./pages/NotFound";
+import Whislist from "./pages/Whislist";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="/orders" element={<Orders />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/whislist" element={<Whislist />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
