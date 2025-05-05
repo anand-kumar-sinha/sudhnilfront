@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState } from "react";
-//import { products } from "../assets/assets";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -13,6 +12,7 @@ const ShopContextProvider = (props) => {
 
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [cartItems, setCartItems] = useState({});
   const [products, setProducts] = useState([]);
   const [banner, setBanners] = useState([]);
@@ -80,13 +80,17 @@ const ShopContextProvider = (props) => {
 
     if (token) {
       try {
+        setLoading(true);
         await axios.post(
           backandUrl + "/api/cart/update",
           { itemId, size, quantity },
           { headers: { token } }
         );
+
+        setLoading(false);
       } catch (error) {
-        console.log(error);
+        setLoading(false);
+
         toast.error(error.message);
       }
     }
@@ -94,6 +98,7 @@ const ShopContextProvider = (props) => {
 
   const fetchUser = async (token) => {
     try {
+      setLoading(true);
       const response = await axios.post(
         backandUrl + "/api/user/me",
         {},
@@ -101,27 +106,29 @@ const ShopContextProvider = (props) => {
       );
       if (response.data.success) {
         setUser(response.data.data);
+        setLoading(false);
         return response.data;
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error.message);
+      setLoading(false);
     }
   };
 
   const fetchCategory = async (token) => {
     try {
+      setLoading(true);
       const response = await axios.get(
         backandUrl + "/api/category/fetch",
-        
+
         { headers: { token } }
       );
       if (response.data.success) {
+        setLoading(false);
         setCategories(response.data.category);
         return response.data;
       }
     } catch (error) {
-      console.log(error);
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -143,34 +150,40 @@ const ShopContextProvider = (props) => {
 
   const getProductsData = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(backandUrl + "/api/product/list");
       if (response.data.success) {
         setProducts(response.data.products);
       } else {
         toast.error(response.data.message);
       }
+      setLoading(false);
     } catch (error) {
-      console.log(error);
+      setLoading(false);
+
       toast.error(error.message);
     }
   };
 
   const getBannersData = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(backandUrl + "/api/banner/fetch");
       if (response.data.success) {
         setBanners(response.data.banner);
       } else {
         toast.error(response.data.message);
       }
+      setLoading(false);
     } catch (error) {
-      console.log(error);
+      setLoading(false);
       toast.error(error.message);
     }
   };
 
   const getUserCart = async (token) => {
     try {
+      setLoading(true);
       const response = await axios.post(
         backandUrl + "/api/cart/get",
         {},
@@ -178,10 +191,11 @@ const ShopContextProvider = (props) => {
       );
 
       if (response.data.success) {
+        setLoading(false);
         setCartItems(response.data.cartData);
       }
     } catch (error) {
-      console.log(error);
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -219,7 +233,9 @@ const ShopContextProvider = (props) => {
     token,
     setToken,
     categories,
-    user
+    user,
+    loading,
+    setLoading,
   };
   return (
     <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>

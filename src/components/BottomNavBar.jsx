@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
-import { assets } from "../assets/assets";
+import { CiHeart } from "react-icons/ci";
 import { GoHome } from "react-icons/go";
 import { BsBag } from "react-icons/bs";
 import { CiSearch } from "react-icons/ci";
@@ -25,14 +25,13 @@ const BottomNavBar = () => {
             <span>Home</span>
           </Link>
           <Link
-            to="/cart"
+            to="/whislist"
             className="flex flex-col items-center justify-center hover:text-blue-600"
           >
             <span>
-              {" "}
-              <BsBag size={25} />
+              <CiHeart size={25} />
             </span>
-            <span>Cart</span>
+            <span>Whislist</span>
           </Link>
           <button
             className="flex flex-col items-center hover:text-blue-600"
@@ -66,14 +65,14 @@ const BottomNavBar = () => {
             <span>Home</span>
           </Link>
           <Link
-            to="/cart"
+            to="/whislist"
             className="flex flex-col items-center justify-center hover:text-blue-600"
           >
             <span>
               {" "}
-              <BsBag size={25} />
+              <CiHeart size={25} />
             </span>
-            <span>Cart</span>
+            <span>Whislist</span>
           </Link>
           <button
             className="flex flex-col items-center hover:text-blue-600"
