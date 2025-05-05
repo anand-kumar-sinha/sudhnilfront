@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
-import { ShopContext } from '../context/ShopContext';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext } from "react";
+import { ShopContext } from "../context/ShopContext";
+import { useNavigate } from "react-router-dom";
 import {
   FiLogOut,
   FiSettings,
@@ -10,18 +10,18 @@ import {
   FiEdit2,
   FiPlus,
   FiShoppingCart,
-  FiMapPin
-} from 'react-icons/fi';
+  FiMapPin,
+} from "react-icons/fi";
 
 const Profile = () => {
   const { token, setToken, setCartItems, user } = useContext(ShopContext);
   const navigate = useNavigate();
 
   const logOut = () => {
-    localStorage.removeItem('token');
-    setToken('');
+    localStorage.removeItem("token");
+    setToken("");
     setCartItems({});
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
@@ -36,7 +36,9 @@ const Profile = () => {
               className="w-16 h-16 rounded-full border"
             />
             <div>
-              <h2 className="text-2xl font-semibold text-gray-800">Hello, {user?.name}</h2>
+              <h2 className="text-2xl font-semibold text-gray-800">
+                Hello, {user?.name}
+              </h2>
               <p className="text-sm text-gray-500">{user?.email}</p>
             </div>
           </div>
@@ -55,12 +57,36 @@ const Profile = () => {
         {/* Action Buttons */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 text-sm">
           {[
-            { icon: <FiPackage className="text-xl text-blue-600" />, label: 'My Orders', onClick: () => navigate('/orders') },
-            { icon: <FiShoppingCart className="text-xl text-blue-600" />, label: 'My Cart', onClick: () => navigate('/cart') },
-            { icon: <FiMapPin className="text-xl text-blue-600" />, label: 'Address', onClick: () => navigate('/address') },
-            { icon: <FiSettings className="text-xl text-blue-600" />, label: 'Settings' },
-            { icon: <FiMessageCircle className="text-xl text-blue-600" />, label: 'Support' },
-            { icon: <FiBell className="text-xl text-blue-600" />, label: 'Notifications' },
+            {
+              icon: <FiPackage className="text-xl text-blue-600" />,
+              label: "My Orders",
+              onClick: () => navigate("/orders"),
+            },
+            {
+              icon: <FiShoppingCart className="text-xl text-blue-600" />,
+              label: "My Cart",
+              onClick: () => navigate("/cart"),
+            },
+            {
+              icon: <FiMapPin className="text-xl text-blue-600" />,
+              label: "Address",
+              onClick: () => navigate("/address"),
+            },
+            {
+              icon: <FiSettings className="text-xl text-blue-600" />,
+              label: "Settings",
+              onClick: () => navigate("/settings"),
+            },
+            {
+              icon: <FiMessageCircle className="text-xl text-blue-600" />,
+              label: "Support",
+              onClick: () => navigate("/support"),
+            },
+            {
+              icon: <FiBell className="text-xl text-blue-600" />,
+              label: "Notifications",
+              onClick: () => navigate("/notifications"),
+            },
           ].map((item, index) => (
             <button
               key={index}
@@ -79,7 +105,9 @@ const Profile = () => {
 
         {/* Saved Addresses */}
         <div>
-          <h3 className="text-lg font-semibold mb-4 text-gray-800">Saved Address</h3>
+          <h3 className="text-lg font-semibold mb-4 text-gray-800">
+            Saved Address
+          </h3>
           <div className="space-y-4">
             <div className="p-4 border rounded-xl bg-gray-50">
               <div className="flex justify-between items-center">
@@ -101,14 +129,9 @@ const Profile = () => {
             </button>
           </div>
         </div>
-
       </div>
     </div>
+  );
+};
 
-
-
-
-  )
-}
-
-export default Profile
+export default Profile;

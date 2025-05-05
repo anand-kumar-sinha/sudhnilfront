@@ -13,6 +13,9 @@ import Verify from "./pages/Verify";
 import Profile from './pages/Profile';
 import NotFound from "./pages/NotFound";
 import Whislist from "./pages/Whislist";
+import Notifications from "./pages/Notifications";
+import Setting from "./pages/Setting";
+import Support from "./pages/Support";
 
 const App = () => {
   return (
@@ -30,6 +33,9 @@ const App = () => {
         <Route path="/verify" element={<Verify />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/whislist" element={<Whislist />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/settings" element={<Setting />} />
+        <Route path="/support" element={<Support />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

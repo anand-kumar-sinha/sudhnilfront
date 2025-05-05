@@ -3,7 +3,7 @@ import React from 'react'
 const Whislist = () => {
   return (
     <div>
-      whislist
+      whislistsdfsdfdsf
     </div>
   )
 }
