@@ -40,6 +40,8 @@ const App = () => {
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/settings" element={<Setting />} />
         <Route path="/support" element={<Support />} />
+        <Route path="/address" element={<Address />} />
+        <Route path="/search" element={<Search />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
