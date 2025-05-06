@@ -1,53 +1,60 @@
 import React, { useState } from "react";
+import { FaSearch } from "react-icons/fa";
 
-const Search = () => {
+const mockProducts = [
+  { id: 1, name: "Cement (50kg)", price: 350, category: "Building Materials" },
+  { id: 2, name: "TMT Bar 12mm", price: 720, category: "Steel" },
+  { id: 3, name: "Bricks (Per 1000)", price: 6000, category: "Building Materials" },
+  { id: 4, name: "River Sand (1 Ton)", price: 1200, category: "Sand" },
+];
+
+const SearchPage = () => {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
-
-  // Simulated product data for demo
-  const products = [
-    { id: 1, name: "iPhone 14", category: "Mobile" },
-    { id: 2, name: "Nike Shoes", category: "Footwear" },
-    { id: 3, name: "Samsung TV", category: "Electronics" },
-    { id: 4, name: "Sony Headphones", category: "Accessories" },
-  ];
+  const [filtered, setFiltered] = useState(mockProducts);
 
   const handleSearch = (e) => {
-    const value = e.target.value;
+    const value = e.target.value.toLowerCase();
     setQuery(value);
-    const filtered = products.filter((item) =>
-      item.name.toLowerCase().includes(value.toLowerCase())
+    setFiltered(
+      mockProducts.filter((product) =>
+        product.name.toLowerCase().includes(value)
+      )
     );
-    setResults(filtered);
   };
 
   return (
-    <div className="p-4 mt-4">
-      <h2 className="text-xl font-semibold mb-2">Search Products</h2>
-      <input
-        type="text"
-        value={query}
-        onChange={handleSearch}
-        placeholder="Search for products..."
-        className="w-full p-2 border border-gray-300 rounded-lg mb-4"
-      />
-      <div>
-        {results.length > 0 ? (
-          <ul className="space-y-2">
-            {results.map((product) => (
-              <li key={product.id} className="p-3 border rounded-md">
-                {product.name} - <span className="text-gray-500">{product.category}</span>
-              </li>
-            ))}
-          </ul>
+    <div className="max-w-4xl mx-auto p-4 pt-6">
+      <h1 className="text-2xl font-bold text-gray-800 mb-4">Search Products</h1>
+
+      <div className="relative mb-6">
+        <input
+          type="text"
+          placeholder="Search for cement, TMT bars, bricks..."
+          value={query}
+          onChange={handleSearch}
+          className="w-full border p-3 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <FaSearch className="absolute right-4 top-3 text-gray-400" />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {filtered.length > 0 ? (
+          filtered.map((item) => (
+            <div
+              key={item.id}
+              className="border p-4 rounded-lg hover:shadow-md transition-shadow"
+            >
+              <h2 className="font-semibold text-lg text-gray-800">{item.name}</h2>
+              <p className="text-sm text-gray-500">Category: {item.category}</p>
+              <p className="text-blue-600 font-bold mt-2">₹{item.price}</p>
+            </div>
+          ))
         ) : (
-          query && <p className="text-gray-600">No products found.</p>
+          <p className="text-gray-500 col-span-2">No products found.</p>
         )}
       </div>
     </div>
-  
+  );
+};
 
-  )
-}
-
-export default Search
+export default SearchPage;
