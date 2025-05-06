@@ -1,20 +1,44 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { useNavigate } from "react-router-dom";
+import WhislistCard from "../components/WhislistCard";
+import axios from "axios";
 
 const Whislist = () => {
-  const { products, currency } = useContext(ShopContext);
+  const { user, setLoading, backandUrl } = useContext(ShopContext);
   const [wishlistItems, setWishlistItems] = useState([]);
+  const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const saved = localStorage.getItem("wishlist");
-    if (saved) {
-      const ids = JSON.parse(saved);
-      const items = products.filter((product) => ids.includes(product._id));
-      setWishlistItems(items);
+    let token = localStorage.getItem("token");
+    fetchWhislist(token);
+  }, [page]);
+
+  const fetchWhislist = async (token) => {
+    try {
+      setLoading(true);
+      const headers = {
+        "Content-Type": "application/json",
+        Token: token,
+      };
+
+      const response = await axios.post(
+        backandUrl + "/api/whislist/fetch",
+        { user, page },
+        { headers }
+      );
+
+      if (response?.data?.success) {
+        setWishlistItems(response?.data?.whislist);
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching wishlist:", error);
+      setLoading(false);
     }
-  }, [products]);
+  };
 
   const removeFromWishlist = (id) => {
     const updated = wishlistItems.filter((item) => item._id !== id);
@@ -26,10 +50,11 @@ const Whislist = () => {
   };
 
   return (
-    <div className="px-4 sm:px-10 py-10 bg-gray-50 min-h-screen">
+    <div className="px-4 sm:px-10 py-10 bg-gray-50 min-h-[70vh]">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl sm:text-3xl font-semibold text-gray-800">
-          My Wishlist <span className="text-blue-500">({wishlistItems.length})</span>
+          My Wishlist{" "}
+          <span className="text-blue-500">({wishlistItems.length})</span>
         </h2>
       </div>
 
@@ -50,36 +75,10 @@ const Whislist = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {wishlistItems.map((item) => (
-            <div
-              key={item._id}
-              className="bg-white rounded-xl shadow-sm hover:shadow-lg transition p-4 border border-gray-200"
-            >
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-full h-48 object-contain mb-4"
-              />
-              <h3 className="text-lg font-medium text-gray-900 mb-1">{item.name}</h3>
-              <p className="text-blue-600 font-semibold mb-2">
-                {currency}{item.price}
-              </p>
-              <div className="flex justify-between items-center">
-                <button
-                  onClick={() => removeFromWishlist(item._id)}
-                  className="text-red-500 hover:text-red-700 transition font-medium"
-                >
-                  ❌ Remove
-                </button>
-                <button
-                  onClick={() => navigate(`/product/${item._id}`)}
-                  className="text-sm text-blue-500 hover:underline"
-                >
-                  View Product
-                </button>
-              </div>
-            </div>
-          ))}
+          {wishlistItems &&
+            wishlistItems?.map((item) => (
+              <WhislistCard key={item._id} item={item} />
+            ))}
         </div>
       )}
     </div>

@@ -5,8 +5,8 @@ import axios from "axios";
 
 export const ShopContext = createContext();
 const ShopContextProvider = (props) => {
-  // const backandUrl = "http://localhost:4000";
-  const backandUrl = "https://ecomm-backend-tau.vercel.app";
+  const backandUrl = "http://localhost:4000";
+  // const backandUrl = "https://ecomm-backend-tau.vercel.app";
   const currency = "$";
   const delivery_fee = 10;
 
@@ -54,6 +54,22 @@ const ShopContextProvider = (props) => {
     }
   };
   useEffect(() => {}, [cartItems]);
+
+  const addToWishlist = async ({ productId }) => {
+    if (token) {
+      try {
+        const response = await axios.post(
+          backandUrl + "/api/whislist/add",
+          { productId },
+          { headers: { token } }
+        );
+        console.log(response)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
 
   const getCartCount = () => {
     let totalCount = 0;
@@ -236,6 +252,7 @@ const ShopContextProvider = (props) => {
     user,
     loading,
     setLoading,
+    addToWishlist
   };
   return (
     <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>
