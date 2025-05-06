@@ -16,6 +16,8 @@ import Whislist from "./pages/Whislist";
 import Notifications from "./pages/Notifications";
 import Setting from "./pages/Setting";
 import Support from "./pages/Support";
+import Search from "./pages/Search";
+import Address from "./pages/Address";
 
 const App = () => {
   return (
@@ -32,7 +34,9 @@ const App = () => {
         <Route path="/orders" element={<Orders />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/address" element={<Address />} />
         <Route path="/whislist" element={<Whislist />} />
+        <Route path="/search" element={<Search />} /> 
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/settings" element={<Setting />} />
         <Route path="/support" element={<Support />} />
