@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import SearchProductCard from "../components/SearchProductCard";
 
 const mockProducts = [
   { id: 1, name: "Cement (50kg)", price: 350, category: "Building Materials" },
   { id: 2, name: "TMT Bar 12mm", price: 720, category: "Steel" },
-  { id: 3, name: "Bricks (Per 1000)", price: 6000, category: "Building Materials" },
+  {
+    id: 3,
+    name: "Bricks (Per 1000)",
+    price: 6000,
+    category: "Building Materials",
+  },
   { id: 4, name: "River Sand (1 Ton)", price: 1200, category: "Sand" },
 ];
 
@@ -88,25 +94,7 @@ const Search = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.length > 0 ? (
               filtered.map((item) => (
-                <div
-                  key={item.id}
-                  className="border p-5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all"
-                >
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-semibold text-gray-800">
-                      {item.name}
-                    </span>
-                    <span className="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full">
-                      {item.category}
-                    </span>
-                  </div>
-                  <p className="text-blue-600 text-lg font-bold mt-1">
-                    ₹{item.price}
-                  </p>
-                  <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg text-sm hover:bg-blue-700 transition">
-                    View Details
-                  </button>
-                </div>
+                <SearchProductCard item={item} key={item._id} />
               ))
             ) : (
               <p className="text-center text-gray-500 col-span-full">

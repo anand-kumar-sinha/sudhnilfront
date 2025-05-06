@@ -100,7 +100,7 @@ const Navbar = () => {
       </div>
       {/* sidebar menu for small screens */}
       <div
-        className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-white transition-all ${
+        className={`absolute top-0 right-0 bottom-0 z-50 overflow-hidden bg-white transition-all ${
           visible ? "w-full" : "w-0"
         }`}
       >
@@ -139,6 +139,13 @@ const Navbar = () => {
             to="/contact"
           >
             CONTACT
+          </NavLink>
+          <NavLink
+            onClick={() => setVisible(false)}
+            className="flex flex-col items-center py-2 border"
+            to="/settings"
+          >
+            SETTINGS
           </NavLink>
         </div>
       </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { CiHeart, CiSearch } from "react-icons/ci";
 import { GoHome } from "react-icons/go";
-import { CgProfile } from "react-icons/cg";
+import { User } from 'lucide-react';
 
 const BottomNavBar = () => {
   return (
@@ -23,7 +23,7 @@ const BottomNavBar = () => {
             <span>Search</span>
           </Link>
           <Link to="/profile" className="flex flex-col items-center hover:text-blue-600">
-            <CgProfile size={25} />
+            <User size={25} />
             <span>Profile</span>
           </Link>
         </div>
@@ -43,7 +43,7 @@ const BottomNavBar = () => {
             <span>Search</span>
           </Link>
           <Link to="/profile" className="flex flex-col items-center hover:text-blue-600">
-            <CgProfile size={25} />
+            <User size={25} />
             <span>Profile</span>
           </Link>
         </div>
