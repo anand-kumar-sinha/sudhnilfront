@@ -18,6 +18,7 @@ import Setting from "./pages/Setting";
 import Support from "./pages/Support";
 import Search from "./pages/Search";
 import Address from "./pages/Address";
+import Category from "./pages/Category";
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const App = () => {
         <Route path="/support" element={<Support />} />
         <Route path="/address" element={<Address />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/category" element={<Category />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
