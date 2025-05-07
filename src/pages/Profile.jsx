@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react"; // ✅ added useState
 import { ShopContext } from "../context/ShopContext";
 import { useNavigate } from "react-router-dom";
 import {
@@ -13,9 +13,13 @@ import {
   FiMapPin,
 } from "react-icons/fi";
 
+import AddressDialog from "../components/AddressDialog"; // ✅ make sure path is correct
+
 const Profile = () => {
   const { token, setToken, setCartItems, user } = useContext(ShopContext);
   const navigate = useNavigate();
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // ✅ dialog state
 
   const logOut = () => {
     localStorage.removeItem("token");
@@ -124,12 +128,19 @@ const Profile = () => {
               </div>
             </div>
 
-            <button className="w-full flex items-center justify-center gap-2 text-blue-600 hover:underline text-sm mt-2">
+            {/* ✅ Open dialog on click */}
+            <button
+              onClick={() => setIsDialogOpen(true)}
+              className="w-full flex items-center justify-center gap-2 text-blue-600 hover:underline text-sm mt-2"
+            >
               <FiPlus /> Add New Address
             </button>
           </div>
         </div>
       </div>
+
+      {/* ✅ Render the dialog */}
+      <AddressDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} />
     </div>
   );
 };

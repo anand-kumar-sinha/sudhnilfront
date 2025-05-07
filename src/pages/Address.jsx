@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Plus, MapPin, Trash2, Pencil } from "lucide-react";
+import AddressDialog from "../components/AddressDialog"; // Make sure path is correct
 
 const initialAddresses = [
   {
@@ -20,6 +21,7 @@ const initialAddresses = [
 
 export default function AddressPage() {
   const [addresses, setAddresses] = useState(initialAddresses);
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // ✅ Add this
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -27,7 +29,10 @@ export default function AddressPage() {
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <MapPin className="text-gray-700" /> Saved Addresses
         </h1>
-        <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-full hover:bg-blue-700">
+        <button
+          onClick={() => setIsDialogOpen(true)} // ✅ Open dialog on click
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-full hover:bg-blue-700"
+        >
           <Plus size={16} /> Add Address
         </button>
       </div>
@@ -65,6 +70,9 @@ export default function AddressPage() {
           </div>
         ))}
       </div>
+
+      {/* ✅ Add the dialog here */}
+      <AddressDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} />
     </div>
   );
 }
