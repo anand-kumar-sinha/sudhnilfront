@@ -46,13 +46,13 @@ const AddressDialog = ({ isOpen, onClose }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded bg-gray-200 hover:bg-blue-100 transition"
+              className="px-4 py-2 rounded bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors duration-200"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-500 transition"
+              className="px-4 py-2 rounded bg-blue-400 text-white hover:bg-blue-600 transition-colors duration-200"
             >
               Save
             </button>
