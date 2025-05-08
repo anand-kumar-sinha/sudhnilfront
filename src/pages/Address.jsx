@@ -5,26 +5,9 @@ import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const initialAddresses = [
-  {
-    id: 1,
-    name: "John Doe",
-    address: "123 Main Street, Springfield, IL, 62704",
-    phone: "(555) 123-4567",
-    isDefault: true,
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    address: "456 Elm Street, Chicago, IL, 60601",
-    phone: "(555) 987-6543",
-    isDefault: false,
-  },
-];
-
 export default function AddressPage() {
   const { backandUrl } = useContext(ShopContext);
-  const [addresses, setAddresses] = useState(initialAddresses);
+  const [addresses, setAddresses] = useState();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
