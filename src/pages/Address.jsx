@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Plus, MapPin, Trash2, Pencil } from "lucide-react";
-import AddressDialog from "../components/AddressDialog"; // Make sure path is correct
+import AddressDialog from "../components/AddressDialog";
+import EditAddressDialog from "../components/EditAddressDialog";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -9,10 +10,13 @@ export default function AddressPage() {
   const { backandUrl, setLoading } = useContext(ShopContext);
   const [addresses, setAddresses] = useState();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
   useEffect(() => {
     fetchAddresses();
   }, []);
+
   const fetchAddresses = async () => {
     try {
       setLoading(true);
@@ -54,13 +58,12 @@ export default function AddressPage() {
     try {
       if (!addressId) {
         toast.error("No address found");
+        return;
       }
       setLoading(true);
       const response = await axios.post(
         backandUrl + `/api/address/delete`,
-        {
-          addressId,
-        },
+        { addressId },
         {
           headers: { token: localStorage.getItem("token") },
         }
@@ -83,7 +86,7 @@ export default function AddressPage() {
           <MapPin className="text-gray-700" /> Saved Addresses
         </h1>
         <button
-          onClick={() => setIsDialogOpen(true)} // ✅ Open dialog on click
+          onClick={() => setIsDialogOpen(true)}
           className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-full hover:bg-blue-700"
         >
           <Plus size={16} /> Add Address
@@ -92,7 +95,7 @@ export default function AddressPage() {
 
       <div className="grid md:grid-cols-2 gap-6">
         {addresses &&
-          addresses?.map((addr) => (
+          addresses.map((addr) => (
             <div
               key={addr._id}
               className={`p-4 border rounded-xl shadow-sm ${
@@ -109,15 +112,9 @@ export default function AddressPage() {
                   <p className="text-sm text-gray-600">
                     Phone: {addr.mobileNumber}
                   </p>
-                  <p className="text-sm text-gray-600">
-                    Pin Code: {addr.pinCode}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    State: {addr.state}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    City: {addr.city}
-                  </p>
+                  <p className="text-sm text-gray-600">Pin Code: {addr.pinCode}</p>
+                  <p className="text-sm text-gray-600">State: {addr.state}</p>
+                  <p className="text-sm text-gray-600">City: {addr.city}</p>
                   {addr?.default && (
                     <span className="inline-block mt-2 text-xs text-blue-600 font-medium">
                       Default Address
@@ -129,7 +126,12 @@ export default function AddressPage() {
                     className="text-gray-500 hover:text-blue-600"
                     onClick={(e) => {
                       e.stopPropagation();
-                      // your edit logic here
+                      setSelectedAddress({
+                        ...addr,
+                        fullName: addr.name,
+                        pincode: addr.pinCode,
+                      });
+                      setEditDialogOpen(true);
                     }}
                   >
                     <Pencil size={18} />
@@ -149,10 +151,25 @@ export default function AddressPage() {
           ))}
       </div>
 
-      {/* ✅ Add the dialog here */}
+      {/* Add Address Dialog */}
       <AddressDialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
+      />
+
+      {/* Edit Address Dialog */}
+      <EditAddressDialog
+        isOpen={editDialogOpen}
+        onClose={() => {
+          setEditDialogOpen(false);
+          setSelectedAddress(null);
+        }}
+        addressData={selectedAddress}
+        token={localStorage.getItem("token")}
+        onSave={() => {
+          fetchAddresses();
+          setEditDialogOpen(false);
+        }}
       />
     </div>
   );

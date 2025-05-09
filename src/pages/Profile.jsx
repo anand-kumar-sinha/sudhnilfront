@@ -14,18 +14,26 @@ import {
 } from "react-icons/fi";
 
 import AddressDialog from "../components/AddressDialog"; // ✅ make sure path is correct
+import EditAddressDialog from "../components/EditAddressDialog"; // ✅ Import EditAddressDialog
 
 const Profile = () => {
   const { token, setToken, setCartItems, user } = useContext(ShopContext);
   const navigate = useNavigate();
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false); // ✅ dialog state
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // ✅ dialog state for Add Address
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false); // ✅ dialog state for Edit Address
+  const [selectedAddress, setSelectedAddress] = useState(null); // ✅ selected address for editing
 
   const logOut = () => {
     localStorage.removeItem("token");
     setToken("");
     setCartItems({});
     navigate("/login");
+  };
+
+  const openEditAddressDialog = (address) => {
+    setSelectedAddress(address); // Set selected address for editing
+    setIsEditDialogOpen(true); // Open the Edit Address Dialog
   };
 
   return (
@@ -60,7 +68,7 @@ const Profile = () => {
 
         {/* Action Buttons */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 text-sm">
-          {[
+          {[ // Other buttons like My Orders, My Cart, etc.
             {
               icon: <FiPackage className="text-xl text-blue-600" />,
               label: "My Orders",
@@ -136,13 +144,16 @@ const Profile = () => {
                       City: {user?.defaultAddress?.city}
                     </p>
                   </div>
-                  <button className="text-blue-600 hover:underline text-sm flex items-center gap-1">
+                  <button
+                    onClick={() => openEditAddressDialog(user?.defaultAddress)} // Open Edit dialog
+                    className="text-blue-600 hover:underline text-sm flex items-center gap-1"
+                  >
                     <FiEdit2 className="text-base" /> Edit
                   </button>
                 </div>
               </div>
 
-              {/* ✅ Open dialog on click */}
+              {/* Add New Address Button */}
               <button
                 onClick={() => setIsDialogOpen(true)}
                 className="w-full flex items-center justify-center gap-2 text-blue-600 hover:underline text-sm mt-2"
@@ -154,10 +165,17 @@ const Profile = () => {
         )}
       </div>
 
-      {/* ✅ Render the dialog */}
+      {/* Add New Address Dialog */}
       <AddressDialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
+      />
+
+      {/* Edit Existing Address Dialog */}
+      <EditAddressDialog
+        isOpen={isEditDialogOpen}
+        onClose={() => setIsEditDialogOpen(false)}
+        address={selectedAddress} // Pass the selected address to edit
       />
     </div>
   );
