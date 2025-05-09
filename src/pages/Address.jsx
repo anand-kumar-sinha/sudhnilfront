@@ -6,7 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 export default function AddressPage() {
-  const { backandUrl } = useContext(ShopContext);
+  const { backandUrl, setLoading } = useContext(ShopContext);
   const [addresses, setAddresses] = useState();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -15,14 +15,63 @@ export default function AddressPage() {
   }, []);
   const fetchAddresses = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(backandUrl + "/api/address/fetch", {
         headers: { token: localStorage.getItem("token") },
       });
-      console.log(response)
       if (response.data.success) {
         setAddresses(response.data.address);
       }
+      setLoading(false);
     } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
+
+  const setDefaultAddress = async (addressId) => {
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        backandUrl + `/api/address/default`,
+        {addressId},
+        {
+          headers: { token: localStorage.getItem("token") },
+        }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message);
+        fetchAddresses();
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      toast.error(error.message);
+    }
+  };
+
+  const deleteAddress = async (addressId) => {
+    try {
+      if (!addressId) {
+        toast.error("No address found");
+      }
+      setLoading(true);
+      const response = await axios.post(
+        backandUrl + `/api/address/delete`,
+        {
+          addressId,
+        },
+        {
+          headers: { token: localStorage.getItem("token") },
+        }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message);
+        fetchAddresses();
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -42,37 +91,41 @@ export default function AddressPage() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
-        {addresses.map((addr) => (
-          <div
-            key={addr._id}
-            className={`p-4 border rounded-xl shadow-sm ${
-              addr?.isDefault ? "border-blue-500" : "border-gray-300"
-            }`}
-          >
-            <div className="flex justify-between items-start">
-              <div>
-                <h2 className="text-lg font-semibold text-gray-800">
-                  {addr.name}
-                </h2>
-                <p className="text-sm text-gray-600 mb-1">{addr.address}</p>
-                <p className="text-sm text-gray-600">Phone: {addr.mobileNumber}</p>
-                {addr?.isDefault && (
-                  <span className="inline-block mt-2 text-xs text-blue-600 font-medium">
-                    Default Address
-                  </span>
-                )}
-              </div>
-              <div className="flex gap-2">
-                <button className="text-gray-500 hover:text-blue-600">
-                  <Pencil size={18} />
-                </button>
-                <button className="text-gray-500 hover:text-red-600">
-                  <Trash2 size={18} />
-                </button>
+        {addresses &&
+          addresses?.map((addr) => (
+            <div
+              key={addr._id}
+              className={`p-4 border rounded-xl shadow-sm ${
+                addr?.default ? "border-blue-500" : "border-gray-300"
+              }`}
+              onClick={() => setDefaultAddress(addr._id)}
+            >
+              <div className="flex justify-between items-start">
+                <div>
+                  <h2 className="text-lg font-semibold text-gray-800">
+                    {addr.name}
+                  </h2>
+                  <p className="text-sm text-gray-600 mb-1">{addr.address}</p>
+                  <p className="text-sm text-gray-600">
+                    Phone: {addr.mobileNumber}
+                  </p>
+                  {addr?.default && (
+                    <span className="inline-block mt-2 text-xs text-blue-600 font-medium">
+                      Default Address
+                    </span>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <button className="text-gray-500 hover:text-blue-600">
+                    <Pencil size={18} />
+                  </button>
+                  <button className="text-gray-500 hover:text-red-600" onClick={() => deleteAddress(addr._id)}>
+                    <Trash2 size={18} />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
 
       {/* ✅ Add the dialog here */}

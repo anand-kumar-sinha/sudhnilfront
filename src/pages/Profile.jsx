@@ -110,17 +110,30 @@ const Profile = () => {
         {/* Saved Addresses */}
         <div>
           <h3 className="text-lg font-semibold mb-4 text-gray-800">
-            Saved Address
+            Default Address
           </h3>
           <div className="space-y-4">
             <div className="p-4 border rounded-xl bg-gray-50">
               <div className="flex justify-between items-center">
                 <div>
-                  <p className="font-medium text-gray-700">Priya Kumari</p>
-                  <p className="text-sm text-gray-600">
-                    Pandey Tola, Nawada, Bihar - 805110
+                  <p className="font-medium text-gray-700">
+                    {user?.defaultAddress?.name}
                   </p>
-                  <p className="text-sm text-gray-600">Phone: +91 6206571984</p>
+                  <p className="text-sm text-gray-600">
+                    {user?.defaultAddress?.address}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Phone: +91 {user?.defaultAddress?.mobileNumber}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Pin Code: {user?.defaultAddress?.pinCode}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    State: {user?.defaultAddress?.state}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    City: {user?.defaultAddress?.city}
+                  </p>
                 </div>
                 <button className="text-blue-600 hover:underline text-sm flex items-center gap-1">
                   <FiEdit2 className="text-base" /> Edit
@@ -140,7 +153,10 @@ const Profile = () => {
       </div>
 
       {/* ✅ Render the dialog */}
-      <AddressDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} />
+      <AddressDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+      />
     </div>
   );
 };
