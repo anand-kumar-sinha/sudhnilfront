@@ -19,6 +19,10 @@ import Support from "./pages/Support";
 import Search from "./pages/Search";
 import Address from "./pages/Address";
 import Category from "./pages/Category";
+import TrackOrder from "./pages/TrackOrder";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import ReturnPolicy from "./pages/ReturnPolicy";
+import TermCondition from "./pages/TermCondition";
 
 const App = () => {
   return (
@@ -43,7 +47,10 @@ const App = () => {
         <Route path="/support" element={<Support />} />
         <Route path="/address" element={<Address />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/category" element={<Category />} />
+        <Route path="/track-order/:id" element={<TrackOrder />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/return-policy" element={<ReturnPolicy />} />
+        <Route path="/term-condition" element={<TermCondition />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
