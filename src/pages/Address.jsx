@@ -109,6 +109,15 @@ export default function AddressPage() {
                   <p className="text-sm text-gray-600">
                     Phone: {addr.mobileNumber}
                   </p>
+                  <p className="text-sm text-gray-600">
+                    Pin Code: {addr.pinCode}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    State: {addr.state}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    City: {addr.city}
+                  </p>
                   {addr?.default && (
                     <span className="inline-block mt-2 text-xs text-blue-600 font-medium">
                       Default Address
