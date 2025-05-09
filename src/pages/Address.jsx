@@ -34,7 +34,7 @@ export default function AddressPage() {
       setLoading(true);
       const response = await axios.post(
         backandUrl + `/api/address/default`,
-        {addressId},
+        { addressId },
         {
           headers: { token: localStorage.getItem("token") },
         }
@@ -116,10 +116,22 @@ export default function AddressPage() {
                   )}
                 </div>
                 <div className="flex gap-2">
-                  <button className="text-gray-500 hover:text-blue-600">
+                  <button
+                    className="text-gray-500 hover:text-blue-600"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // your edit logic here
+                    }}
+                  >
                     <Pencil size={18} />
                   </button>
-                  <button className="text-gray-500 hover:text-red-600" onClick={() => deleteAddress(addr._id)}>
+                  <button
+                    className="text-gray-500 hover:text-red-600"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteAddress(addr._id);
+                    }}
+                  >
                     <Trash2 size={18} />
                   </button>
                 </div>
