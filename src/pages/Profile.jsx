@@ -108,48 +108,50 @@ const Profile = () => {
         </div>
 
         {/* Saved Addresses */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4 text-gray-800">
-            Default Address
-          </h3>
-          <div className="space-y-4">
-            <div className="p-4 border rounded-xl bg-gray-50">
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="font-medium text-gray-700">
-                    {user?.defaultAddress?.name}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    {user?.defaultAddress?.address}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Phone: +91 {user?.defaultAddress?.mobileNumber}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Pin Code: {user?.defaultAddress?.pinCode}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    State: {user?.defaultAddress?.state}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    City: {user?.defaultAddress?.city}
-                  </p>
+        {user?.defaultAddress && (
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-gray-800">
+              Default Address
+            </h3>
+            <div className="space-y-4">
+              <div className="p-4 border rounded-xl bg-gray-50">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium text-gray-700">
+                      {user?.defaultAddress?.name}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {user?.defaultAddress?.address}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Phone: +91 {user?.defaultAddress?.mobileNumber}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Pin Code: {user?.defaultAddress?.pinCode}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      State: {user?.defaultAddress?.state}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      City: {user?.defaultAddress?.city}
+                    </p>
+                  </div>
+                  <button className="text-blue-600 hover:underline text-sm flex items-center gap-1">
+                    <FiEdit2 className="text-base" /> Edit
+                  </button>
                 </div>
-                <button className="text-blue-600 hover:underline text-sm flex items-center gap-1">
-                  <FiEdit2 className="text-base" /> Edit
-                </button>
               </div>
-            </div>
 
-            {/* ✅ Open dialog on click */}
-            <button
-              onClick={() => setIsDialogOpen(true)}
-              className="w-full flex items-center justify-center gap-2 text-blue-600 hover:underline text-sm mt-2"
-            >
-              <FiPlus /> Add New Address
-            </button>
+              {/* ✅ Open dialog on click */}
+              <button
+                onClick={() => setIsDialogOpen(true)}
+                className="w-full flex items-center justify-center gap-2 text-blue-600 hover:underline text-sm mt-2"
+              >
+                <FiPlus /> Add New Address
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* ✅ Render the dialog */}
