@@ -7,8 +7,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 export default function AddressPage() {
-  const { backandUrl, setLoading } = useContext(ShopContext);
-  const [addresses, setAddresses] = useState();
+  const { backandUrl, setLoading, fetchAddresses, addresses } =
+    useContext(ShopContext);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -16,22 +16,6 @@ export default function AddressPage() {
   useEffect(() => {
     fetchAddresses();
   }, []);
-
-  const fetchAddresses = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(backandUrl + "/api/address/fetch", {
-        headers: { token: localStorage.getItem("token") },
-      });
-      if (response.data.success) {
-        setAddresses(response.data.address);
-      }
-      setLoading(false);
-    } catch (error) {
-      toast.error(error.message);
-      setLoading(false);
-    }
-  };
 
   const setDefaultAddress = async (addressId) => {
     try {
@@ -112,7 +96,9 @@ export default function AddressPage() {
                   <p className="text-sm text-gray-600">
                     Phone: {addr.mobileNumber}
                   </p>
-                  <p className="text-sm text-gray-600">Pin Code: {addr.pinCode}</p>
+                  <p className="text-sm text-gray-600">
+                    Pin Code: {addr.pinCode}
+                  </p>
                   <p className="text-sm text-gray-600">State: {addr.state}</p>
                   <p className="text-sm text-gray-600">City: {addr.city}</p>
                   {addr?.default && (

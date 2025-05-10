@@ -5,7 +5,8 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 const AddressDialog = ({ isOpen, onClose }) => {
-  const { user, backandUrl, setLoading } = useContext(ShopContext);
+  const { user, backandUrl, setLoading, fetchAddresses } =
+    useContext(ShopContext);
   const [name, setName] = useState(user?.name);
   const [email, setEmail] = useState(user?.email);
   const [phome, setPhone] = useState(user?.phone);
@@ -40,6 +41,7 @@ const AddressDialog = ({ isOpen, onClose }) => {
         onClose();
       }
       setLoading(false);
+      fetchAddresses();
     } catch (error) {
       setLoading(false);
       toast.error(error.message);

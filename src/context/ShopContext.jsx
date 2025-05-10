@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export const ShopContext = createContext();
+export const  ShopContext = createContext();
 const ShopContextProvider = (props) => {
   // const backandUrl = "http://localhost:4000";
   const backandUrl = "https://ecomm-backend-tau.vercel.app";
@@ -20,6 +20,7 @@ const ShopContextProvider = (props) => {
   const [user, setUser] = useState();
   const [token, setToken] = useState("");
   const navigate = useNavigate();
+  const [addresses, setAddresses] = useState();
 
   const addToCart = async (itemId, size) => {
     let cartData = structuredClone(cartItems);
@@ -63,13 +64,12 @@ const ShopContextProvider = (props) => {
           { productId },
           { headers: { token } }
         );
-        console.log(response)
+        console.log(response);
       } catch (error) {
         console.log(error);
       }
     }
   };
-
 
   const getCartCount = () => {
     let totalCount = 0;
@@ -197,6 +197,22 @@ const ShopContextProvider = (props) => {
     }
   };
 
+  const fetchAddresses = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(backandUrl + "/api/address/fetch", {
+        headers: { token: localStorage.getItem("token") },
+      });
+      if (response.data.success) {
+        setAddresses(response.data.address);
+      }
+      setLoading(false);
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
+
   const getUserCart = async (token) => {
     try {
       setLoading(true);
@@ -252,7 +268,10 @@ const ShopContextProvider = (props) => {
     user,
     loading,
     setLoading,
-    addToWishlist
+    addToWishlist,
+    addresses,
+    setAddresses,
+    fetchAddresses
   };
   return (
     <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>
