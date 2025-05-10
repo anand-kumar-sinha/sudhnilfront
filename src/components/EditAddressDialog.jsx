@@ -56,7 +56,6 @@ const EditAddressDialog = ({ isOpen, onClose, addressData, token, onSave }) => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log(error)
       toast.error("Something went wrong!");
     }
   };
@@ -74,29 +73,24 @@ const EditAddressDialog = ({ isOpen, onClose, addressData, token, onSave }) => {
         </button>
         <h2 className="text-xl font-bold mb-4">Edit Address</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {[
-            "name",
-            "mobileNumber",
-            "address",
-            "city",
-            "state",
-            "pinCode",
-          ].map((field) => (
-            <input
-              key={field}
-              type={
-                field === "mobileNumber" || field === "pinCode"
-                  ? "number"
-                  : "text"
-              }
-              name={field}
-              placeholder={field.replace(/([A-Z])/g, " $1")}
-              value={formData[field]}
-              onChange={handleChange}
-              required
-              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-400 transition-all"
-            />
-          ))}
+          {["name", "mobileNumber", "address", "city", "state", "pinCode"].map(
+            (field) => (
+              <input
+                key={field}
+                type={
+                  field === "mobileNumber" || field === "pinCode"
+                    ? "number"
+                    : "text"
+                }
+                name={field}
+                placeholder={field.replace(/([A-Z])/g, " $1")}
+                value={formData[field]}
+                onChange={handleChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-400 transition-all"
+              />
+            )
+          )}
           <div className="flex justify-end gap-2">
             <button
               type="button"
