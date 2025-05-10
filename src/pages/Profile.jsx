@@ -17,13 +17,13 @@ import AddressDialog from "../components/AddressDialog"; // ✅ make sure path i
 import EditAddressDialog from "../components/EditAddressDialog"; // ✅ Import EditAddressDialog
 
 const Profile = () => {
-  const { token, setToken, setCartItems, user } = useContext(ShopContext);
+  const { token, setToken, setCartItems, user, fetchAddresses } = useContext(ShopContext);
   const navigate = useNavigate();
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false); // ✅ dialog state for Add Address
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false); // ✅ dialog state for Edit Address
-  const [selectedAddress, setSelectedAddress] = useState(null); // ✅ selected address for editing
-
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const logOut = () => {
     localStorage.removeItem("token");
     setToken("");
@@ -68,7 +68,8 @@ const Profile = () => {
 
         {/* Action Buttons */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 text-sm">
-          {[ // Other buttons like My Orders, My Cart, etc.
+          {[
+            // Other buttons like My Orders, My Cart, etc.
             {
               icon: <FiPackage className="text-xl text-blue-600" />,
               label: "My Orders",
@@ -171,11 +172,18 @@ const Profile = () => {
         onClose={() => setIsDialogOpen(false)}
       />
 
-      {/* Edit Existing Address Dialog */}
       <EditAddressDialog
         isOpen={isEditDialogOpen}
-        onClose={() => setIsEditDialogOpen(false)}
-        address={selectedAddress} // Pass the selected address to edit
+        onClose={() => {
+          setIsEditDialogOpen(false);
+          setSelectedAddress(null);
+        }}
+        addressData={selectedAddress}
+        token={localStorage.getItem("token")}
+        onSave={() => {
+          fetchAddresses();
+          setEditDialogOpen(false);
+        }}
       />
     </div>
   );

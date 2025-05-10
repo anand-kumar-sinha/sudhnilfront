@@ -7,8 +7,8 @@ export const  ShopContext = createContext();
 const ShopContextProvider = (props) => {
   // const backandUrl = "http://localhost:4000";
   const backandUrl = "https://ecomm-backend-tau.vercel.app";
-  const currency = "$";
-  const delivery_fee = 10;
+  const currency = "₹";
+  const delivery_fee = 40;
 
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);

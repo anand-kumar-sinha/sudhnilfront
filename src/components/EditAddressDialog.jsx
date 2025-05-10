@@ -1,23 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FiX } from "react-icons/fi";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { ShopContext } from "../context/ShopContext";
 
 const EditAddressDialog = ({ isOpen, onClose, addressData, token, onSave }) => {
+  const { backandUrl, setLoading, fetchAddresses } = useContext(ShopContext);
+
   const [formData, setFormData] = useState({
-    fullName: "",
+    _id: "",
+    name: "",
     mobileNumber: "",
     address: "",
     city: "",
     state: "",
-    pincode: "",
+    pinCode: "",
   });
-
-  const backandUrl = "https://ecomm-backend-tau.vercel.app";
 
   useEffect(() => {
     if (addressData) {
-      setFormData(addressData);
+      setFormData({
+        _id: addressData._id,
+        name: addressData.name,
+        mobileNumber: addressData.mobileNumber,
+        address: addressData.address,
+        city: addressData.city,
+        state: addressData.state,
+        pinCode: addressData.pinCode,
+      });
     }
   }, [addressData]);
 
@@ -32,21 +42,22 @@ const EditAddressDialog = ({ isOpen, onClose, addressData, token, onSave }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(
-        `${backandUrl}/api/address/update/${addressData._id}`,
+      setLoading(true);
+      const response = await axios.post(
+        `${backandUrl}/api/address/update`,
         formData,
         { headers: { token } }
       );
       if (response.data.success) {
         toast.success("Address updated successfully!");
-        onSave(); // Optional: re-fetch or update parent state
+        onSave();
         onClose();
-      } else {
-        toast.error("Failed to update address");
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
+      console.log(error)
       toast.error("Something went wrong!");
-      console.error(error);
     }
   };
 
@@ -63,10 +74,21 @@ const EditAddressDialog = ({ isOpen, onClose, addressData, token, onSave }) => {
         </button>
         <h2 className="text-xl font-bold mb-4">Edit Address</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {["fullName", "mobileNumber", "address", "city", "state", "pincode"].map((field) => (
+          {[
+            "name",
+            "mobileNumber",
+            "address",
+            "city",
+            "state",
+            "pinCode",
+          ].map((field) => (
             <input
               key={field}
-              type={field === "mobileNumber" || field === "pincode" ? "number" : "text"}
+              type={
+                field === "mobileNumber" || field === "pinCode"
+                  ? "number"
+                  : "text"
+              }
               name={field}
               placeholder={field.replace(/([A-Z])/g, " $1")}
               value={formData[field]}
@@ -93,9 +115,7 @@ const EditAddressDialog = ({ isOpen, onClose, addressData, token, onSave }) => {
         </form>
       </div>
     </div>
- 
+  );
+};
 
-  )
-}
-
-export default EditAddressDialog
+export default EditAddressDialog;
