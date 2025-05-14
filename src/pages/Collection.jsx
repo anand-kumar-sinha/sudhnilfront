@@ -66,7 +66,7 @@ const Collection = () => {
   }, [sortType]);
 
   return (
-    <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
+    <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 mb-4 pt-10 border-t">
       {/* Filter Sidebar */}
       <div className="min-w-60">
         <p
@@ -108,27 +108,6 @@ const Collection = () => {
             ))}
           </div>
         </div>
-
-        {/* SubCategory Filter */}
-        <div
-          className={`border border-gray-300 pl-5 py-3 my-5 ${
-            showFilter ? "" : "hidden"
-          } sm:block`}
-        >
-          <p className="mb-3 text-sm font-medium">TYPE</p>
-          <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
-            {["Topwear", "Bottomwear", "Winterwear"].map((type) => (
-              <p className="flex gap-2" key={type}>
-                <input
-                  type="checkbox"
-                  className="w-3"
-                  value={type}
-                />
-                {type}
-              </p>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* Products Display */}
@@ -146,7 +125,7 @@ const Collection = () => {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
-          {filterProducts.map((item, index) => (
+          {filterProducts && filterProducts?.length > 0 ? filterProducts.map((item, index) => (
             <ProductItem
               key={index}
               name={item.name}
@@ -154,7 +133,7 @@ const Collection = () => {
               price={item.price}
               image={item.image}
             />
-          ))}
+          )): <p>No products found.</p>}
         </div>
       </div>
     </div>
