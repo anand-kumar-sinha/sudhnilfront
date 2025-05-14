@@ -288,7 +288,8 @@ const ShopContextProvider = (props) => {
     addresses,
     setAddresses,
     fetchAddresses,
-    fetchProductByCategory
+    fetchProductByCategory,
+    getProductsData
   };
   return (
     <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>
