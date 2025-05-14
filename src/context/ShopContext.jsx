@@ -262,6 +262,7 @@ const ShopContextProvider = (props) => {
   }, []);
   const value = {
     products,
+    setProducts,
     banner,
     currency,
     delivery_fee,

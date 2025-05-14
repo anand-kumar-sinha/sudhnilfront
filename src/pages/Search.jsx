@@ -1,42 +1,46 @@
-import React, { useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import SearchProductCard from "../components/SearchProductCard";
-
-const mockProducts = [
-  { id: 1, name: "Cement (50kg)", price: 350, category: "Building Materials" },
-  { id: 2, name: "TMT Bar 12mm", price: 720, category: "Steel" },
-  {
-    id: 3,
-    name: "Bricks (Per 1000)",
-    price: 6000,
-    category: "Building Materials",
-  },
-  { id: 4, name: "River Sand (1 Ton)", price: 1200, category: "Sand" },
-];
-
-const categories = ["All", "Building Materials", "Steel", "Sand"];
+import { ShopContext } from "../context/ShopContext";
+import axios from "axios";
 
 const Search = () => {
+  const { setLoading, setProducts, backandUrl, products } =
+    useContext(ShopContext);
+  const debounceRef = useRef(null);
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortOrder, setSortOrder] = useState("default");
 
-  const handleSearch = (e) => setQuery(e.target.value.toLowerCase());
+  const handleSearch = (e) => {
+    setQuery(e.target.value);
+    const key = e.target.value;
+
+    // Clear the previous timeout
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    // Set a new timeout
+    debounceRef.current = setTimeout(async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          backandUrl + `/api/product/search/?key=${key}`
+        );
+        if (response.data.success) {
+          console.log(response.data.products);
+          setProducts(response.data.products);
+        }
+      } catch (error) {
+        // Handle error
+      } finally {
+        setLoading(false);
+      }
+    }, 3000); // 3 seconds
+  };
   const handleCategoryChange = (e) => setSelectedCategory(e.target.value);
   const handleSortChange = (e) => setSortOrder(e.target.value);
-
-  const filtered = mockProducts
-    .filter((product) => {
-      const matchesQuery = product.name.toLowerCase().includes(query);
-      const matchesCategory =
-        selectedCategory === "All" || product.category === selectedCategory;
-      return matchesQuery && matchesCategory;
-    })
-    .sort((a, b) => {
-      if (sortOrder === "low") return a.price - b.price;
-      if (sortOrder === "high") return b.price - a.price;
-      return 0;
-    });
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
@@ -45,63 +49,45 @@ const Search = () => {
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {/* Sidebar Filters */}
-        <div className="space-y-6 md:col-span-1">
-          <div>
-            <h3 className="font-semibold text-lg mb-2">Category</h3>
-            <select
-              value={selectedCategory}
-              onChange={handleCategoryChange}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-          </div>
+        <div>
+          <h3 className="font-semibold text-lg mb-2">Sort by Price</h3>
+          <select
+            value={sortOrder}
+            onChange={handleSortChange}
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="default">Default</option>
+            <option value="low">Low to High</option>
+            <option value="high">High to Low</option>
+          </select>
+        </div>
+      </div>
 
-          <div>
-            <h3 className="font-semibold text-lg mb-2">Sort by Price</h3>
-            <select
-              value={sortOrder}
-              onChange={handleSortChange}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              <option value="default">Default</option>
-              <option value="low">Low to High</option>
-              <option value="high">High to Low</option>
-            </select>
-          </div>
+      {/* Search + Results */}
+      <div className="md:col-span-3">
+        {/* Search Bar */}
+        <div className="relative mb-6">
+          <input
+            type="text"
+            placeholder="Search for cement, TMT bars, bricks..."
+            value={query}
+            onChange={handleSearch}
+            className="w-full border p-4 pl-12 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <FaSearch className="absolute left-4 top-4 text-gray-400" />
         </div>
 
-        {/* Search + Results */}
-        <div className="md:col-span-3">
-          {/* Search Bar */}
-          <div className="relative mb-6">
-            <input
-              type="text"
-              placeholder="Search for cement, TMT bars, bricks..."
-              value={query}
-              onChange={handleSearch}
-              className="w-full border p-4 pl-12 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <FaSearch className="absolute left-4 top-4 text-gray-400" />
-          </div>
-
-          {/* Product List */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.length > 0 ? (
-              filtered.map((item) => (
-                <SearchProductCard item={item} key={item._id} />
-              ))
-            ) : (
-              <p className="text-center text-gray-500 col-span-full">
-                No products found.
-              </p>
-            )}
-          </div>
+        {/* Product List */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {products && products.length > 0 ? (
+            products.map((item) => (
+              <SearchProductCard item={item} key={item._id} />
+            ))
+          ) : (
+            <p className="text-center text-gray-500 col-span-full">
+              No products found.
+            </p>
+          )}
         </div>
       </div>
     </div>
