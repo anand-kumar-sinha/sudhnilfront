@@ -8,7 +8,6 @@ const SearchProductCard = ({ item }) => {
       key={item._id}
       className="border p-5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all flex flex-col h-full"
     >
-      {console.log(item)}
       {/* Product Image */}
       <div className="relative w-full h-40 mb-4 rounded-lg overflow-hidden bg-gray-100">
         {item?.image && item.image.length > 0 ? (

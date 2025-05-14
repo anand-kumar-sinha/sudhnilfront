@@ -25,6 +25,7 @@ const Search = () => {
     debounceRef.current = setTimeout(async () => {
       try {
         setLoading(true);
+        if (key === "") return;
         const response = await axios.get(
           backandUrl + `/api/product/search/?key=${key}`
         );
