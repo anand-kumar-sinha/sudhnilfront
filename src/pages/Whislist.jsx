@@ -40,15 +40,6 @@ const Whislist = () => {
     }
   };
 
-  const removeFromWishlist = (id) => {
-    const updated = wishlistItems.filter((item) => item._id !== id);
-    setWishlistItems(updated);
-    localStorage.setItem(
-      "wishlist",
-      JSON.stringify(updated.map((item) => item._id))
-    );
-  };
-
   return (
     <div className="px-4 sm:px-10 py-10 bg-gray-50 min-h-[70vh]">
       <div className="flex items-center justify-between mb-6">
@@ -77,7 +68,7 @@ const Whislist = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {wishlistItems &&
             wishlistItems?.map((item) => (
-              <WhislistCard key={item._id} item={item} />
+              <WhislistCard key={item._id} item={item} fetchWhislist={fetchWhislist} />
             ))}
         </div>
       )}
