@@ -3,10 +3,10 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export const  ShopContext = createContext();
+export const ShopContext = createContext();
 const ShopContextProvider = (props) => {
-  // const backandUrl = "http://localhost:4000";
-  const backandUrl = "https://ecomm-backend-tau.vercel.app";
+  const backandUrl = "http://localhost:4000";
+  // const backandUrl = "https://ecomm-backend-tau.vercel.app";
   const currency = "₹";
   const delivery_fee = 40;
 
@@ -87,7 +87,6 @@ const ShopContextProvider = (props) => {
     }
     return totalCount;
   };
-  //for this item id and size we will update quantity
   const updateQuantity = async (itemId, size, quantity) => {
     let cartData = structuredClone(cartItems);
 
@@ -232,6 +231,22 @@ const ShopContextProvider = (props) => {
     }
   };
 
+  const fetchProductByCategory = async (id) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        backandUrl + `/api/product/category/${id}`
+      );
+      if (response.data.success) {
+        setProducts(response.data.products);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     getProductsData();
     getBannersData();
@@ -271,7 +286,8 @@ const ShopContextProvider = (props) => {
     addToWishlist,
     addresses,
     setAddresses,
-    fetchAddresses
+    fetchAddresses,
+    fetchProductByCategory
   };
   return (
     <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>

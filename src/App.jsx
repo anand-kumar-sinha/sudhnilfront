@@ -10,7 +10,7 @@ import Login from "./pages/Login";
 import PlaceOrder from "./pages/PlaceOrder";
 import Orders from "./pages/Orders";
 import Verify from "./pages/Verify";
-import Profile from './pages/Profile';
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import Whislist from "./pages/Whislist";
 import Notifications from "./pages/Notifications";
@@ -29,7 +29,7 @@ const App = () => {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
-          <Route path="/category" element={<Category />} /> 
+        <Route path="/category" element={<Category />} />
         <Route path="/collection" element={<Collection />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
@@ -42,7 +42,7 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/address" element={<Address />} />
         <Route path="/whislist" element={<Whislist />} />
-        <Route path="/search" element={<Search />} /> 
+        <Route path="/search" element={<Search />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/settings" element={<Setting />} />
         <Route path="/support" element={<Support />} />
