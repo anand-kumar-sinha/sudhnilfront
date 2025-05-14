@@ -9,12 +9,12 @@ const SearchProductCard = ({ item }) => {
       className="border p-5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all flex flex-col h-full"
     >
       {/* Product Image */}
-      <div className="relative w-full h-40 mb-4 rounded-lg overflow-hidden bg-gray-100">
+      <div className="w-full aspect-[4/3] mb-4 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center ">
         {item?.image && item.image.length > 0 ? (
           <img
             src={item.image[0]}
             alt={item.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-fill"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-400">
