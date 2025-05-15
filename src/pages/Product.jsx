@@ -3,15 +3,18 @@ import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
+import Review from "../components/Review";
 
 const Product = () => {
   const { productId } = useParams();
   const { products, currency, addToCart, addToWishlist } =
     useContext(ShopContext);
+
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
   const [wishlistAdded, setWishlistAdded] = useState(false);
+  const [activeTab, setActiveTab] = useState("description"); // NEW: state for tabs
 
   const fetchProductData = async () => {
     products.map((item) => {
@@ -116,27 +119,46 @@ const Product = () => {
 
       {/* Description and review section */}
       <div className="mt-20">
-        <div className="flex">
-          <b className="border px-5 py-3 text-sm">Description</b>
-          <p className="border px-5 py-3 text-sm">Reviews(122)</p>
+        <div className="flex border-b">
+          <button
+            className={`px-5 py-3 text-sm border-r ${
+              activeTab === "description" ? "font-semibold text-black" : "text-gray-500"
+            }`}
+            onClick={() => setActiveTab("description")}
+          >
+            Description
+          </button>
+          <button
+            className={`px-5 py-3 text-sm ${
+              activeTab === "reviews" ? "font-semibold text-black" : "text-gray-500"
+            }`}
+            onClick={() => setActiveTab("reviews")}
+          >
+            Reviews ({productData.reviews?.length || 0})
+          </button>
         </div>
-        <div className="flex flex-col gap-4 border px-6 py-6 text-sm text-gray-500">
-          <p>
-            An e-commerce website is an online platform that facilitates the
-            buying and selling of products or services over the internet. It
-            serves as a virtual marketplace where businesses and individuals can
-            showcase their products, interact with customers, and conduct
-            transactions without the need for physical presence. E-commerce
-            websites have gained immense popularity due to their convenience,
-            accessibility and the global reach they offer.
-          </p>
-          <p>
-            E-commerce websites typically display products or services along
-            with detailed descriptions, images, prices, and any available
-            variations (e.g., sizes, colors). Each product usually has its own
-            dedicated page with relevant information.
-          </p>
-        </div>
+
+        {activeTab === "description" ? (
+          <div className="flex flex-col gap-4 border px-6 py-6 text-sm text-gray-500">
+            <p>
+              An e-commerce website is an online platform that facilitates the
+              buying and selling of products or services over the internet. It
+              serves as a virtual marketplace where businesses and individuals can
+              showcase their products, interact with customers, and conduct
+              transactions without the need for physical presence. E-commerce
+              websites have gained immense popularity due to their convenience,
+              accessibility and the global reach they offer.
+            </p>
+            <p>
+              E-commerce websites typically display products or services along
+              with detailed descriptions, images, prices, and any available
+              variations (e.g., sizes, colors). Each product usually has its own
+              dedicated page with relevant information.
+            </p>
+          </div>
+        ) : (
+          <Review />
+        )}
       </div>
 
       {/* Related products */}
