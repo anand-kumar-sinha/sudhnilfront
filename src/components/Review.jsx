@@ -10,7 +10,7 @@ const dummyReviews = [
     title: "Good choice",
     variant: "Color Classic Black",
     comment:
-      "After 1 hr use the battery status was reduced too much. Also when we connect on Phone call and switch to Video call then airdop will disconnect automatically, we need to reconnect manually.",
+      "Good TMT bars, though a bit pricey but quality is worth it.",
     verified: true,
     time: "11 months ago",
   },
@@ -21,29 +21,18 @@ const dummyReviews = [
     title: "Excellent!",
     variant: "Color Blue",
     comment:
-      "Great product with fantastic battery life. The sound quality is also top-notch. Worth the price!",
+      "Excellent quality TMT bars. Very strong and durable for construction",
     verified: true,
     time: "2 months ago",
   },
 ];
 
 const ReviewCard = ({ review }) => {
-  const {
-    user,
-    location,
-    rating,
-    title,
-    variant,
-    comment,
-    verified,
-    time,
-  } = review;
-
+  const { user, location, rating, title, variant, comment, verified, time } = review;
   const [expanded, setExpanded] = useState(false);
 
   return (
     <div className="border rounded-md p-4 bg-white shadow-sm text-sm text-gray-800">
-      {/* Rating and Title */}
       <div className="flex items-center gap-1 mb-1">
         {Array.from({ length: 5 }).map((_, i) => (
           <Star
@@ -57,11 +46,7 @@ const ReviewCard = ({ review }) => {
         <span className="mx-1">•</span>
         <span className="font-medium">{title}</span>
       </div>
-
-      {/* Variant */}
       <p className="text-gray-500 text-xs mb-2">Review for: {variant}</p>
-
-      {/* Comment with "more"/"less" toggle */}
       <p className="text-gray-700 mb-2">
         {expanded ? comment : comment.slice(0, 130) + (comment.length > 130 ? "..." : "")}
         {comment.length > 130 && (
@@ -73,13 +58,9 @@ const ReviewCard = ({ review }) => {
           </button>
         )}
       </p>
-
-      {/* User Info */}
       <p className="text-gray-500 text-xs font-medium mb-3">
         {user}, {location}
       </p>
-
-      {/* Footer */}
       <div className="flex items-center gap-2 text-gray-400 text-xs">
         {verified && <span className="font-semibold">✔ Verified Purchase</span>}
         <span>•</span>
@@ -92,6 +73,15 @@ const ReviewCard = ({ review }) => {
 const Review = ({ productId }) => {
   const [reviews, setReviews] = useState([]);
   const [error, setError] = useState("");
+
+  const [formData, setFormData] = useState({
+    user: "",
+    location: "",
+    rating: 0,
+    title: "",
+    variant: "",
+    comment: "",
+  });
 
   const fetchReviews = async () => {
     try {
@@ -107,6 +97,44 @@ const Review = ({ productId }) => {
   useEffect(() => {
     fetchReviews();
   }, [productId]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleRatingChange = (index) => {
+    setFormData((prev) => ({ ...prev, rating: index + 1 }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const newReview = {
+      ...formData,
+      verified: true,
+      time: "Just now",
+    };
+
+    try {
+      // Replace with actual POST request once backend is ready
+      // await axios.post(`/api/products/${productId}/reviews`, newReview);
+      setReviews((prev) => [newReview, ...prev]);
+      setFormData({
+        user: "",
+        location: "",
+        rating: 0,
+        title: "",
+        variant: "",
+        comment: "",
+      });
+    } catch (err) {
+      console.error("Failed to submit review");
+    }
+  };
 
   const averageRating =
     reviews.reduce((acc, r) => acc + r.rating, 0) / (reviews.length || 1);
@@ -133,9 +161,84 @@ const Review = ({ productId }) => {
 
       {error && <p className="text-red-500 text-xs">{error}</p>}
 
+      {/* Reviews List */}
       {reviews.map((rev, i) => (
         <ReviewCard key={i} review={rev} />
       ))}
+
+      {/* Review Submission Form */}
+      <form onSubmit={handleSubmit} className="space-y-3 border p-4 rounded-md bg-gray-50 mt-4">
+        <h4 className="font-medium text-gray-800">Write a Review</h4>
+
+        <div className="grid grid-cols-2 gap-3">
+          <input
+            name="user"
+            value={formData.user}
+            onChange={handleInputChange}
+            placeholder="Your Name"
+            required
+            className="border p-2 rounded w-full"
+          />
+          <input
+            name="location"
+            value={formData.location}
+            onChange={handleInputChange}
+            placeholder="Your city"
+            required
+            className="border p-2 rounded w-full"
+          />
+        </div>
+
+        <input
+          name="title"
+          value={formData.title}
+          onChange={handleInputChange}
+          placeholder="Review Title"
+          required
+          className="border p-2 rounded w-full"
+        />
+
+        <input
+          name="variant"
+          value={formData.variant}
+          onChange={handleInputChange}
+          placeholder="Product Name"
+          required
+          className="border p-2 rounded w-full"
+        />
+
+        <textarea
+          name="comment"
+          value={formData.comment}
+          onChange={handleInputChange}
+          placeholder="Write your review..."
+          required
+          rows={3}
+          className="border p-2 rounded w-full"
+        />
+
+        {/* Star Rating Selector */}
+        <div className="flex items-center gap-1">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Star
+              key={i}
+              size={24}
+              fill={i < formData.rating ? "#facc15" : "none"}
+              stroke="#facc15"
+              className="cursor-pointer"
+              onClick={() => handleRatingChange(i)}
+            />
+          ))}
+          <span className="text-sm text-gray-600 ml-2">{formData.rating}/5</span>
+        </div>
+
+        <button
+          type="submit"
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm"
+        >
+          Submit Review
+        </button>
+      </form>
     </div>
   );
 };
