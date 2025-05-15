@@ -1,8 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const CategoryCard = ({ data }) => {
+  const naivgate = useNavigate()
   return (
-    <div className="bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-lg transition">
+    <div className="bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-lg transition" onClick={() => naivgate(`/collection`, { state: { id: data._id} })}>
       <img
         src={data?.image}
         alt="Electronics"

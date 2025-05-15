@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CheckCircle, Truck, Package, Clock, MapPin } from "lucide-react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { ShopContext } from "../context/ShopContext";
 
 const steps = [
   { label: "Order Placed", icon: <Clock size={20} />, key: "placed" },
@@ -11,8 +12,8 @@ const steps = [
 ];
 
 const TrackOrder = () => {
+  const {backandUrl} = useContext(ShopContext)
   const [order, setOrder] = useState(null);
-  const backandUrl = "https://ecomm-backend-tau.vercel.app";
 
   useEffect(() => {
     fetchOrderTracking();

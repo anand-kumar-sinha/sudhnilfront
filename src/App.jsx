@@ -52,6 +52,7 @@ const App = () => {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/return-policy" element={<ReturnPolicy />} />
         <Route path="/term-condition" element={<TermCondition />} />
+        <Route path="/track-order/:id" element={<TrackOrder />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

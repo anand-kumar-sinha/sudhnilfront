@@ -3,10 +3,13 @@ import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import Title from "../components/Title";
 import ProductItem from "../components/ProductItem";
+import { useLocation } from "react-router-dom";
 
 const Collection = () => {
   const { products, categories, fetchProductByCategory, getProductsData } =
     useContext(ShopContext);
+  const location = useLocation();
+  const { id } = location.state
   const [showFilter, setShowFilter] = useState(false);
   const [sortType, setSortType] = useState("relevant");
   const [sortedProducts, setSortedProducts] = useState([]);
@@ -39,6 +42,11 @@ const Collection = () => {
   };
 
   useEffect(() => {
+    console.log(id);
+    if (id) {
+      fetchProductByCategory(id);
+      return;
+    }
     getProductsData();
   }, []);
 
