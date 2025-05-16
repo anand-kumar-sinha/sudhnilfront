@@ -6,10 +6,6 @@ const ReviewCard = ({ review }) => {
 
   return (
     <div className="border rounded-md p-4 bg-white shadow-sm text-sm text-gray-800">
-        {
-            console.log(review)
-        }
-        
       <div className="flex items-center gap-1 mb-1">
         {Array.from({length: review?.rating }).map((_, i) => (
           <Star

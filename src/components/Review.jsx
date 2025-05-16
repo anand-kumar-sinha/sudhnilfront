@@ -93,7 +93,7 @@ const Review = ({ productId }) => {
 
   return (
     <div className="flex flex-col gap-4 text-sm text-gray-700">
-      {console.log(productId)}
+      
       <h3 className="text-lg font-semibold">
         Customer Reviews ({reviews.length})
       </h3>

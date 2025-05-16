@@ -9,7 +9,7 @@ const Collection = () => {
   const { products, categories, fetchProductByCategory, getProductsData } =
     useContext(ShopContext);
   const location = useLocation();
-  const { id } = location.state
+  const { id } = location.state || {};
   const [showFilter, setShowFilter] = useState(false);
   const [sortType, setSortType] = useState("relevant");
   const [sortedProducts, setSortedProducts] = useState([]);
