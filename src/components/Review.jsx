@@ -5,30 +5,6 @@ import ReviewCard from "./ReviewCard";
 import { ShopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
 
-// const dummyReviews = [
-//   {
-//     user: "Manoj Tupe",
-//     location: "Pune",
-//     rating: 4,
-//     title: "Good choice",
-//     variant: "Color Classic Black",
-//     comment: "Good TMT bars, though a bit pricey but quality is worth it.",
-//     verified: true,
-//     time: "11 months ago",
-//   },
-//   {
-//     user: "Aarti Singh",
-//     location: "Delhi",
-//     rating: 5,
-//     title: "Excellent!",
-//     variant: "Color Blue",
-//     comment:
-//       "Excellent quality TMT bars. Very strong and durable for construction",
-//     verified: true,
-//     time: "2 months ago",
-//   },
-// ];
-
 const Review = ({ productId }) => {
   const [reviews, setReviews] = useState([]);
   const [error, setError] = useState("");
@@ -45,12 +21,19 @@ const Review = ({ productId }) => {
 
   const fetchReviews = async () => {
     try {
-      const res = await axios.get(`/api/products/${productId}/reviews`);
-      const fetchedReviews = res.data.reviews || [];
-      setReviews(fetchedReviews.length > 0 ? fetchedReviews : dummyReviews);
+      setLoading(true);
+      const res = await axios.get(
+        backandUrl + `/api/review/fetch/${productId}`
+      );
+
+      if (res.data.success) {
+        const fetchedReviews = res.data.reviews || [];
+        setReviews(fetchedReviews.length > 0 ? fetchedReviews : dummyReviews);
+      }
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       setError("Failed to load reviews. Showing sample reviews.");
-      setReviews(dummyReviews);
     }
   };
 
@@ -78,7 +61,8 @@ const Review = ({ productId }) => {
       console.log(formData);
       const response = await axios.post(
         backandUrl + `/api/review/add/${productId}`,
-        formData, {
+        formData,
+        {
           headers: {
             token,
           },
