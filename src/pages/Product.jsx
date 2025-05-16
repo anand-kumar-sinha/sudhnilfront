@@ -157,7 +157,7 @@ const Product = () => {
             </p>
           </div>
         ) : (
-          <Review />
+          <Review productId={productData._id}/>
         )}
       </div>
 
