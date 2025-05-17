@@ -1,17 +1,38 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "./Title";
 import ProductItem from "./ProductItem";
 
 const LatestCollection = () => {
   const { products } = useContext(ShopContext);
-  // new state variable storing initial 10 products
+  const [visibleCount, setVisibleCount] = useState(10);
   const [latestProducts, setLatestProducts] = useState([]);
-  // products will get loaded in latesProducts state
-  //using useEffectHook
+  const loaderRef = useRef(null);
+
+  // Update product list based on visibleCount
   useEffect(() => {
-    setLatestProducts(products.slice(0, 10));
-  }, [products]); //<---dependency array
+    setLatestProducts(products.slice(0, visibleCount));
+  }, [products, visibleCount]);
+
+  // Infinite scroll trigger using IntersectionObserver
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && visibleCount < products.length) {
+          setVisibleCount((prev) => prev + 10);
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    const loader = loaderRef.current;
+    if (loader) observer.observe(loader);
+
+    return () => {
+      if (loader) observer.unobserve(loader);
+    };
+  }, [visibleCount, products.length]);
+
   return (
     <div className="my-10">
       <div className="text-center py-8 text-3xl">
@@ -26,13 +47,17 @@ const LatestCollection = () => {
 
       {/* rendering products */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
-        { latestProducts && latestProducts?.map((item, index) => (
-          <ProductItem
-        key={index}
-            item={item}
-          />
+        {latestProducts.map((item, index) => (
+          <ProductItem key={index} item={item} />
         ))}
       </div>
+
+      {/* Loader to trigger more loading */}
+      {visibleCount < products.length && (
+        <div ref={loaderRef} className="text-center py-6 text-gray-500">
+          Loading more products...
+        </div>
+      )}
     </div>
   );
 };
