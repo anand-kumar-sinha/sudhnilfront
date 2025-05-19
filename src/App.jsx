@@ -48,7 +48,6 @@ const App = () => {
         <Route path="/support" element={<Support />} />
         <Route path="/address" element={<Address />} />
         <Route path="/search" element={<Search />} />
-
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/return-policy" element={<ReturnPolicy />} />
         <Route path="/term-condition" element={<TermCondition />} />

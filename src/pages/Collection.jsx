@@ -4,17 +4,38 @@ import { assets } from "../assets/assets";
 import Title from "../components/Title";
 import ProductItem from "../components/ProductItem";
 import { useLocation } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroll-component";
+
+const ITEMS_PER_PAGE = 12;
 
 const Collection = () => {
-  const { products, categories, fetchProductByCategory, getProductsData } =
-    useContext(ShopContext);
+  const {
+    products,
+    categories,
+    fetchProductByCategory,
+    getProductsData,
+    hasMoreProducts,
+  } = useContext(ShopContext);
+
   const location = useLocation();
   const { id } = location.state || {};
+
   const [showFilter, setShowFilter] = useState(false);
   const [sortType, setSortType] = useState("relevant");
   const [sortedProducts, setSortedProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [currentCategory, setCurrentCategory] = useState(id || "0");
 
-  // Sort products whenever products or sortType changes
+  // Load initial products
+  useEffect(() => {
+    if (currentCategory === "0") {
+      getProductsData(1, ITEMS_PER_PAGE);
+    } else {
+      fetchProductByCategory(currentCategory, 1, ITEMS_PER_PAGE);
+    }
+  }, [currentCategory]);
+
+  // Sort whenever sortType or products change
   useEffect(() => {
     if (!products) return;
 
@@ -27,30 +48,27 @@ const Collection = () => {
         sorted.sort((a, b) => b.price - a.price);
         break;
       default:
-        // Keep original order for "relevant"
         break;
     }
     setSortedProducts(sorted);
   }, [products, sortType]);
 
-  const toggleCategory = (id) => {
-    if (id === "0") {
-      getProductsData();
-      return;
-    }
-    fetchProductByCategory(id);
+  const toggleCategory = (catId) => {
+    setPage(1);
+    setCurrentCategory(catId);
   };
 
-  useEffect(() => {
-    console.log(id);
-    if (id) {
-      fetchProductByCategory(id);
-      return;
-    }
-    getProductsData();
-  }, []);
+  const loadMoreProducts = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
 
-  // Display either sorted products or original products
+    if (currentCategory === "0") {
+      getProductsData(nextPage, ITEMS_PER_PAGE);
+    } else {
+      fetchProductByCategory(currentCategory, nextPage, ITEMS_PER_PAGE);
+    }
+  };
+
   const displayProducts = sortType === "relevant" ? products : sortedProducts;
 
   return (
@@ -69,7 +87,6 @@ const Collection = () => {
           />
         </p>
 
-        {/* Category Filter */}
         <div
           className={`border border-gray-300 pl-5 py-3 mt-6 ${
             showFilter ? "" : "hidden"
@@ -77,31 +94,18 @@ const Collection = () => {
         >
           <p className="mb-3 text-sm font-medium">CATEGORIES</p>
           <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
-            <label
-              htmlFor={"0"}
-              className="flex gap-2"
-              key={"0"}
-              onChange={() => toggleCategory("0")}
-            >
-              <input
-                type="radio"
-                id={"0"}
-                name="category" // Add this line
-                className="w-3"
-                value={"0"}
-              />
+            <label className="flex gap-2" onChange={() => toggleCategory("0")}>
+              <input type="radio" name="category" className="w-3" value="0" />
               All
             </label>
             {categories?.map((cat) => (
               <label
-                htmlFor={cat._id}
-                className="flex gap-2"
                 key={cat._id}
+                className="flex gap-2"
                 onChange={() => toggleCategory(cat._id)}
               >
                 <input
                   type="radio"
-                  id={cat._id}
                   name="category"
                   className="w-3"
                   value={cat.categoryName}
@@ -128,17 +132,25 @@ const Collection = () => {
           </select>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
-          {displayProducts && displayProducts.length > 0 ? (
-            displayProducts.map((item, index) => (
-              <ProductItem key={index} item={item} />
-            ))
-          ) : (
-            <p className="col-span-full text-center text-gray-500">
-              No products found.
-            </p>
-          )}
-        </div>
+        <InfiniteScroll
+          dataLength={displayProducts.length}
+          next={loadMoreProducts}
+          hasMore={hasMoreProducts}
+          loader={<p>Loading...</p>}
+          endMessage={<p>No more products</p>}
+        >
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
+            {displayProducts && displayProducts.length > 0 ? (
+              displayProducts.map((item, index) => (
+                <ProductItem key={index} item={item} />
+              ))
+            ) : (
+              <p className="col-span-full text-center text-gray-500">
+                No products found.
+              </p>
+            )}
+          </div>
+        </InfiniteScroll>
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ const ProductItem = ({ item }) => {
       </div>
       <p className="pt-3 pb-1 text-sm">{item?.name}</p>
       <p className="text-sm font-medium">
-        {item?.currency}
+        {currency}
         {item?.price}
       </p>
     </Link>

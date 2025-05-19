@@ -7,24 +7,12 @@ import Review from "../components/Review";
 
 const Product = () => {
   const { productId } = useParams();
-  const { products, currency, addToCart, addToWishlist } =
+  const { productDataById, currency, addToCart, addToWishlist, singleProduct } =
     useContext(ShopContext);
-
-  const [productData, setProductData] = useState(false);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(singleProduct?.image[0]);
   const [size, setSize] = useState("");
   const [wishlistAdded, setWishlistAdded] = useState(false);
   const [activeTab, setActiveTab] = useState("description"); // NEW: state for tabs
-
-  const fetchProductData = async () => {
-    products.map((item) => {
-      if (item._id === productId) {
-        setProductData(item);
-        setImage(item.image[0]);
-        return null;
-      }
-    });
-  };
 
   const handleAddToWishlist = (productId) => {
     addToWishlist({ productId });
@@ -33,16 +21,21 @@ const Product = () => {
   };
 
   useEffect(() => {
-    fetchProductData();
-  }, [productId, products]);
+    productDataById(productId);
+    setImage(singleProduct?.image[0]);
+  }, [productId]);
+  
+  useEffect(() => {
+    setImage(singleProduct?.image[0]);
+  }, [singleProduct]);
 
-  return productData ? (
+  return  (
     <div className="border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100">
       <div className="flex gap-12 sm:gap-12 flex-col sm:flex-row">
         {/* product images */}
         <div className="flex-1 flex flex-col-reverse gap-3 sm:flex-row">
           <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full ">
-            {productData.image.map((item, index) => (
+            {singleProduct?.image?.map((item, index) => (
               <img
                 onClick={() => setImage(item)}
                 src={item}
@@ -59,7 +52,7 @@ const Product = () => {
 
         {/* product info */}
         <div className="flex-1 ">
-          <h1 className="font-medium text-2xl mt-2">{productData.name}</h1>
+          <h1 className="font-medium text-2xl mt-2">{singleProduct?.name}</h1>
           <div className="flex items-center gap-1 mt-2">
             <img src={assets.star_icon} alt="" className="w-3.5" />
             <img src={assets.star_icon} alt="" className="w-3.5" />
@@ -70,15 +63,15 @@ const Product = () => {
           </div>
           <p className="mt-5 text-3xl font-medium">
             {currency}
-            {productData.price}
+            {singleProduct?.price}
           </p>
           <p className="mt-5 text-gray-500 md:w-4/5">
-            {productData.description}
+            {singleProduct?.description}
           </p>
           <div className="flex flex-col gap-4 my-8">
             <p>Select Size</p>
             <div className="flex gap-2">
-              {productData.sizes.map((item, index) => (
+              {singleProduct?.sizes.map((item, index) => (
                 <button
                   onClick={() => setSize(item)}
                   className={`border py-2 px-4 bg-gray-100 ${
@@ -93,13 +86,13 @@ const Product = () => {
           </div>
           <div className="flex gap-4">
             <button
-              onClick={() => addToCart(productData._id, size)}
+              onClick={() => addToCart(singleProduct?._id, size)}
               className="bg-black text-white px-8 py-3 text-sm active:bg-gray-700"
             >
               Add To Cart
             </button>
             <button
-              onClick={() => handleAddToWishlist(productData._id)}
+              onClick={() => handleAddToWishlist(singleProduct?._id)}
               className="border border-black text-black px-8 py-3 text-sm hover:bg-black hover:text-white transition-colors"
             >
               Add to Wishlist
@@ -134,7 +127,7 @@ const Product = () => {
             }`}
             onClick={() => setActiveTab("reviews")}
           >
-            Reviews ({productData.reviews?.length || 0})
+            Reviews ({singleProduct?.reviews?.length || 0})
           </button>
         </div>
 
@@ -157,19 +150,17 @@ const Product = () => {
             </p>
           </div>
         ) : (
-          <Review productId={productData._id}/>
+          <Review productId={singleProduct?._id}/>
         )}
       </div>
 
       {/* Related products */}
       <RelatedProducts
-        category={productData.category}
-        subCategory={productData.subCategory}
+        category={singleProduct?.category}
+        subCategory={singleProduct?.subCategory}
       />
     </div>
-  ) : (
-    <div className="opacity-0"></div>
-  );
+  ) 
 };
 
 export default Product;

@@ -8,12 +8,14 @@ import { Outlet } from "react-router-dom";
 import { useContext } from "react";
 import { ShopContext } from "./context/ShopContext";
 import Loading from "./components/Loading";
+import Scroller from "./scroller";
 
 const Layout = () => {
   const { loading } = useContext(ShopContext);
   return (
     <div className="px-4 sm:px-5[vw] md:px-7[vw] md:mb-24 lg:px-[9vw] mb-16">
       {loading && <Loading />}
+      <Scroller />
       <ToastContainer />
       <Navbar />
       <SearchBar />

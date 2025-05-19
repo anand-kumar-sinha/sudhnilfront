@@ -4,21 +4,21 @@ import Title from "./Title";
 import ProductItem from "./ProductItem";
 
 const LatestCollection = () => {
-  const { products } = useContext(ShopContext);
+  const { productsBestSeller } = useContext(ShopContext);
   const [visibleCount, setVisibleCount] = useState(10);
-  const [latestProducts, setLatestProducts] = useState([]);
+  const [latestproductsBestSeller, setLatestproductsBestSeller] = useState([]);
   const loaderRef = useRef(null);
 
   // Update product list based on visibleCount
   useEffect(() => {
-    setLatestProducts(products.slice(0, visibleCount));
-  }, [products, visibleCount]);
+    setLatestproductsBestSeller(productsBestSeller.slice(0, visibleCount));
+  }, [productsBestSeller, visibleCount]);
 
   // Infinite scroll trigger using IntersectionObserver
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && visibleCount < products.length) {
+        if (entries[0].isIntersecting && visibleCount < productsBestSeller.length) {
           setVisibleCount((prev) => prev + 10);
         }
       },
@@ -31,7 +31,7 @@ const LatestCollection = () => {
     return () => {
       if (loader) observer.unobserve(loader);
     };
-  }, [visibleCount, products.length]);
+  }, [visibleCount, productsBestSeller.length]);
 
   return (
     <div className="my-10">
@@ -45,17 +45,17 @@ const LatestCollection = () => {
         </p>
       </div>
 
-      {/* rendering products */}
+      {/* rendering productsBestSeller */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
-        {latestProducts.map((item, index) => (
+        {latestproductsBestSeller.map((item, index) => (
           <ProductItem key={index} item={item} />
         ))}
       </div>
 
       {/* Loader to trigger more loading */}
-      {visibleCount < products.length && (
+      {visibleCount < productsBestSeller.length && (
         <div ref={loaderRef} className="text-center py-6 text-gray-500">
-          Loading more products...
+          Loading more productsBestSeller...
         </div>
       )}
     </div>

@@ -5,16 +5,19 @@ import axios from "axios";
 
 export const ShopContext = createContext();
 const ShopContextProvider = (props) => {
-  // const backandUrl = "http://localhost:4000";
-  const backandUrl = "https://ecomm-backend-tau.vercel.app";
+  const backandUrl = "http://localhost:4000";
+  // const backandUrl = "https://ecomm-backend-tau.vercel.app";
   const currency = "₹";
   const delivery_fee = 40;
 
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [cartItems, setCartItems] = useState({});
   const [products, setProducts] = useState([]);
+  const [hasMoreProducts, setHasMoreProducts] = useState(true);
+  const [productsBestSeller, setProductsBestSeller] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [singleProduct, setSingleProduct] = useState();
+  const [cartItems, setCartItems] = useState({});
   const [banner, setBanners] = useState([]);
   const [categories, setCategories] = useState([]);
   const [user, setUser] = useState();
@@ -163,19 +166,61 @@ const ShopContextProvider = (props) => {
     return totalAmount;
   };
 
-  const getProductsData = async () => {
+  const getProductsBestSellerData = async (page = 1) => {
     try {
       setLoading(true);
-      const response = await axios.get(backandUrl + "/api/product/list");
+      const response = await axios.get(
+        `${backandUrl}/api/product/list/best-seller?page=${page}`
+      );
+
       if (response.data.success) {
-        setProducts(response.data.products);
+        setProductsBestSeller(response.data.products);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      toast.error(error.message);
+    }
+  };
+
+  const getProductsData = async (page = 1) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${backandUrl}/api/product/list?page=${page}`
+      );
+
+      if (response.data.success) {
+        const newProducts = response.data.products;
+
+        setProducts((prev) =>
+          page === 1 ? newProducts : [...prev, ...newProducts]
+        );
+
+        // Assume your API returns 0 when no more products
+        setHasMoreProducts(newProducts.length > 0);
       } else {
         toast.error(response.data.message);
       }
       setLoading(false);
     } catch (error) {
       setLoading(false);
+      toast.error(error.message);
+    }
+  };
 
+  const productDataById = async (productId) => {
+    try {
+      setLoading(true);
+      const response = await axios.post(backandUrl + "/api/product/single", {
+        productId: productId,
+      });
+      if (response.data.success) {
+        setSingleProduct(response.data.product);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -248,9 +293,10 @@ const ShopContextProvider = (props) => {
   };
 
   useEffect(() => {
-    getProductsData();
+    // getProductsData();
     getBannersData();
     fetchCategory();
+    getProductsBestSellerData();
   }, []);
 
   useEffect(() => {
@@ -289,7 +335,12 @@ const ShopContextProvider = (props) => {
     setAddresses,
     fetchAddresses,
     fetchProductByCategory,
-    getProductsData
+    getProductsData,
+    hasMoreProducts,
+    setHasMoreProducts,
+    productsBestSeller,
+    productDataById,
+    singleProduct,
   };
   return (
     <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>
