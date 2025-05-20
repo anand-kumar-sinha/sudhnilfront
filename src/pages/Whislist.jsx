@@ -30,7 +30,7 @@ const Whislist = () => {
       );
 
       if (response?.data?.success) {
-        setWishlistItems(response?.data?.whislist);
+        setWishlistItems(response?.data?.wishlist);
       }
 
       setLoading(false);

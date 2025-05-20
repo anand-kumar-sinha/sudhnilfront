@@ -35,9 +35,9 @@ const SearchProductCard = ({ item }) => {
 
         {/* Category Section */}
         <div className="flex gap-2 flex-wrap mb-2">
-          {item?.category?.categoryName && (
+          {item?.categoryDetails?.categoryName && (
             <span className="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full">
-              Category: {item.category.categoryName}
+              Category: {item.categoryDetails.categoryName}
             </span>
           )}
         </div>
