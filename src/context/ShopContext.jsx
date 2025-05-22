@@ -5,8 +5,8 @@ import axios from "axios";
 
 export const ShopContext = createContext();
 const ShopContextProvider = (props) => {
-  const backandUrl = "http://localhost:4000";
-  // const backandUrl = "https://ecomm-backend-tau.vercel.app";
+  // const backandUrl = "http://localhost:4000";
+  const backandUrl = "https://ecomm-backend-tau.vercel.app";
   const currency = "₹";
   const delivery_fee = 40;
 
@@ -185,7 +185,7 @@ const ShopContextProvider = (props) => {
 
   const getProductsData = async (page = 1) => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const response = await axios.get(
         `${backandUrl}/api/product/list?page=${page}`
       );
@@ -202,9 +202,9 @@ const ShopContextProvider = (props) => {
       } else {
         toast.error(response.data.message);
       }
-      setLoading(false);
+      // setLoading(false);
     } catch (error) {
-      setLoading(false);
+      // setLoading(false);
       toast.error(error.message);
     }
   };

@@ -5,6 +5,7 @@ import Title from "../components/Title";
 import ProductItem from "../components/ProductItem";
 import { useLocation } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
+import RounderScroller from "../components/RounderScroller";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -136,8 +137,12 @@ const Collection = () => {
           dataLength={displayProducts.length}
           next={loadMoreProducts}
           hasMore={hasMoreProducts}
-          loader={<p>Loading...</p>}
-          endMessage={<p>No more products</p>}
+          loader={<RounderScroller />}
+          endMessage={
+            <p className="col-span-full text-center text-gray-500">
+              No more products
+            </p>
+          }
         >
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
             {displayProducts && displayProducts.length > 0 ? (
@@ -145,7 +150,7 @@ const Collection = () => {
                 <ProductItem key={index} item={item} />
               ))
             ) : (
-              <p className="col-span-full text-center text-gray-500">
+              <p className="col-span-full text-center text-gray-500 ">
                 No products found.
               </p>
             )}

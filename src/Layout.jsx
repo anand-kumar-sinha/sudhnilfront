@@ -8,7 +8,7 @@ import { Outlet } from "react-router-dom";
 import { useContext } from "react";
 import { ShopContext } from "./context/ShopContext";
 import Loading from "./components/Loading";
-import Scroller from "./scroller";
+import Scroller from "./Scroller";
 
 const Layout = () => {
   const { loading } = useContext(ShopContext);
