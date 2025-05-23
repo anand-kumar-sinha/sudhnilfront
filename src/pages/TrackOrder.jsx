@@ -4,12 +4,17 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { ShopContext } from "../context/ShopContext";
 import { useParams } from "react-router-dom";
+import NotFound from "./NotFound";
 
 const steps = [
   { label: "Order Placed", icon: <Clock size={20} />, key: "placed" },
   { label: "Packing", icon: <PackageOpen size={20} />, key: "packing" },
   { label: "Shipping", icon: <Truck size={20} />, key: "shipped" },
-  { label: "Out for Delivery", icon: <MapPin size={20} />, key: "outForDelivery" },
+  {
+    label: "Out for Delivery",
+    icon: <MapPin size={20} />,
+    key: "outForDelivery",
+  },
   { label: "Delivered", icon: <CheckCircle size={20} />, key: "delivered" },
 ];
 
@@ -48,13 +53,15 @@ const TrackOrder = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      toast.error("Failed to fetch order details.");
     }
   };
 
   // Determine the current step index
   const currentStep = steps.findIndex((step) => step.label === order?.status);
 
+  if (!order) {
+    return <NotFound />;
+  }
   return (
     <div className="max-w-3xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Track Your Order</h1>
@@ -81,9 +88,9 @@ const TrackOrder = () => {
           Total Items: {order?.items?.length}
         </p>
         <p className="text-sm text-gray-600">
-          Shipping to:{" "}
-          {order?.address?.country}, {order?.address?.state}, {order?.address?.city},{" "}
-          {order?.address?.street}, {order?.address?.zipcode}
+          Shipping to: {order?.address?.country}, {order?.address?.state},{" "}
+          {order?.address?.city}, {order?.address?.street},{" "}
+          {order?.address?.zipcode}
         </p>
         <p className="text-sm text-gray-600">
           {order?.address?.firstName} {order?.address?.lastName},{" "}
@@ -94,7 +101,8 @@ const TrackOrder = () => {
       {/* Step Tracker */}
       <div className="flex flex-col gap-6">
         {steps.map((step, index) => {
-          const isCompleted = steps.findIndex(s => s.label === order?.status) > index;
+          const isCompleted =
+            steps.findIndex((s) => s.label === order?.status) > index;
           const isActive = currentStep === index;
 
           return (
