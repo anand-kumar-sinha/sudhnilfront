@@ -30,6 +30,7 @@ const Orders = () => {
               item["payment"] = order?.payment;
               item["paymentMethod"] = order?.paymentMethod;
               item["date"] = order?.date;
+              item["orderId"] = order?._id;
               allOrdersItem.push(item);
             });
           });
@@ -92,8 +93,9 @@ const Orders = () => {
                   <p className="min-w-2 h-2 rounded-full bg-green-500"></p>
                   <p className="text-sm md:text-base">{item?.status}</p>
                 </div>
+
                 <button
-                  onClick={() => navigate(`/track-order/${item?._id}`)}
+                  onClick={() => navigate(`/track-order/${item?.orderId}`)}
                   className="border px-4 py-2 text-sm font-medium rounded-sm"
                 >
                   Track Order
