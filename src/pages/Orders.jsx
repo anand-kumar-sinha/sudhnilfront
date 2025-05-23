@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { data, useNavigate } from "react-router-dom";
 
 const Orders = () => {
-  const { backandUrl, token, currency } = useContext(ShopContext);
+  const { backandUrl, token, currency, setLoading } = useContext(ShopContext);
 
   const [orderData, setOrderData] = useState([]);
   const navigate = useNavigate();
@@ -16,6 +16,7 @@ const Orders = () => {
       if (!token) {
         return null;
       } else {
+        setLoading(true)
         const response = await axios.post(
           backandUrl + "/api/order/userorders",
           {},
@@ -38,9 +39,9 @@ const Orders = () => {
           setOrderData(allOrdersItem.reverse());
         }
       }
+      setLoading(false)
     } catch (error) {
-      console.log(error);
-      toast.error(error.message);
+      setLoading(false)
     }
   };
 
