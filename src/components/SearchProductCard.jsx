@@ -1,6 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; 
 
 const SearchProductCard = ({ item }) => {
+  const navigate = useNavigate(); // 
+
   if (!item) return null;
 
   return (
@@ -9,7 +12,7 @@ const SearchProductCard = ({ item }) => {
       className="border p-5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all flex flex-col h-full"
     >
       {/* Product Image */}
-      <div className="w-full aspect-[4/3] mb-4 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center ">
+      <div className="w-full aspect-[4/3] mb-4 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
         {item?.image && item.image.length > 0 ? (
           <img
             src={item.image[0]}
@@ -25,7 +28,6 @@ const SearchProductCard = ({ item }) => {
 
       {/* Product Info */}
       <div className="flex-grow">
-        {/* Product Name and Price */}
         <div className="mb-2">
           <h2 className="text-sm font-semibold text-gray-800 line-clamp-1">
             {item.name}
@@ -57,9 +59,12 @@ const SearchProductCard = ({ item }) => {
         )}
       </div>
 
-      {/* View Details Button */}
-      <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg text-sm hover:bg-blue-700 transition">
-        View Details
+      {/*  View Details Button with Navigation */}
+      <button
+        onClick={() => navigate(`/product/${item._id}`)} 
+        className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg text-sm hover:bg-blue-700 transition"
+      >
+        View Product
       </button>
     </div>
   );
