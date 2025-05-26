@@ -9,9 +9,9 @@ const ProductItem = ({ item }) => {
       className="text-gray-700 cursor-pointer "
       to={`/product/${item?._id}`}
     >
-      <div className="overflow-hidden">
+      <div className="w-full aspect-[4/3] mb-4 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center transition-all transform hover:scale-105 ">
         <img
-          className="hover:scale-110 transition ease-in-out"
+          className="w-full h-full object-fill transition-transform duration-300 ease-in-out transform hover:scale-110 "
           src={item?.image[0]}
           alt=""
         />
