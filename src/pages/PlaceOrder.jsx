@@ -85,6 +85,7 @@ const PlaceOrder = () => {
                 size: item,
                 quantity: cartItems[items][item],
                 productId: itemInfo._id,
+                sellerId: itemInfo?.seller || ""
               };
               orderItems.push(newData);
             }

@@ -3,11 +3,10 @@ import { ShopContext } from "../context/ShopContext";
 import Title from "../components/Title";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { data, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Orders = () => {
   const { backandUrl, token, currency, setLoading } = useContext(ShopContext);
-
   const [orderData, setOrderData] = useState([]);
   const navigate = useNavigate();
 
@@ -15,33 +14,34 @@ const Orders = () => {
     try {
       if (!token) {
         return null;
-      } else {
-        setLoading(true)
-        const response = await axios.post(
-          backandUrl + "/api/order/userorders",
-          {},
-          { headers: { token } }
-        );
-
-        if (response.data.success) {
-          let allOrdersItem = [];
-          response.data.orders.map((order) => {
-            order.items.map((item) => {
-              item["status"] = order?.status;
-              item["payment"] = order?.payment;
-              item["paymentMethod"] = order?.paymentMethod;
-              item["date"] = order?.date;
-              item["orderId"] = order?._id;
-              allOrdersItem.push(item);
-            });
-          });
-
-          setOrderData(allOrdersItem.reverse());
-        }
       }
-      setLoading(false)
+      setLoading(true);
+      const response = await axios.post(
+        backandUrl + "/api/order/userorders",
+        {},
+        { headers: { token } }
+      );
+
+      if (response.data.success) {
+        // Transform the API data to match your component's expectations
+        const transformedOrders = response.data.orders.map(order => ({
+          ...order.item, // Spread the item properties
+          status: order.status,
+          payment: order.payment,
+          paymentMethod: order.paymentMethod,
+          date: order.date,
+          orderId: order._id,
+          productId: order.item.productId, // Keep the nested productId
+          price: order.amount // Assuming amount is the price
+        }));
+        
+        setOrderData(transformedOrders.reverse());
+      }
     } catch (error) {
-      setLoading(false)
+      toast.error("Failed to load orders");
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,8 +55,7 @@ const Orders = () => {
         <Title text1={"MY"} text2={"ORDERS"} />
       </div>
       <div>
-        {
-          // Use return to return the JSX inside map()
+        {orderData.length > 0 ? (
           orderData.map((item, index) => (
             <div
               key={index}
@@ -65,14 +64,16 @@ const Orders = () => {
               <div className="flex items-start gap-6 text-sm">
                 <img
                   className="w-16 sm:w-20"
-                  src={item?.productId?.image[0]}
+                  src={item?.productId?.image?.[0]}
                   alt="product"
                 />
                 <div className="flex flex-col">
-                  <p className="sm:text-base font-medium">{item?.name}</p>
+                  <p className="sm:text-base font-medium">
+                    {/* Product name might not be in the API response */}
+                    Order #{item?.orderId}
+                  </p>
                   <div className="flex items-center gap-3 mt-1 text-base text-gray-700">
                     <p>
-                      {" "}
                       {currency}
                       {item?.price}
                     </p>
@@ -80,12 +81,14 @@ const Orders = () => {
                     <p>Size: {item?.size}</p>
                   </div>
                   <p className="mt-1">
-                    Date:<span className="text-gray-400"></span>
-                    {new Date(item?.date).toDateString()}
+                    Date: <span className="text-gray-400">
+                      {new Date(item?.date).toDateString()}
+                    </span>
                   </p>
                   <p className="mt-1">
-                    Payment:<span className="text-gray-400"></span>
-                    {item?.paymentMethod}
+                    Payment: <span className="text-gray-400">
+                      {item?.paymentMethod} ({item?.payment ? "Paid" : "Pending"})
+                    </span>
                   </p>
                 </div>
               </div>
@@ -94,7 +97,6 @@ const Orders = () => {
                   <p className="min-w-2 h-2 rounded-full bg-green-500"></p>
                   <p className="text-sm md:text-base">{item?.status}</p>
                 </div>
-
                 <button
                   onClick={() => navigate(`/track-order/${item?.orderId}`)}
                   className="border px-4 py-2 text-sm font-medium rounded-sm"
@@ -104,7 +106,9 @@ const Orders = () => {
               </div>
             </div>
           ))
-        }
+        ) : (
+          <p className="py-8 text-center text-gray-500">No orders found</p>
+        )}
       </div>
     </div>
   );

@@ -85,9 +85,6 @@ const TrackOrder = () => {
           Payment Method: {order?.paymentMethod}
         </p>
         <p className="text-sm text-gray-600">
-          Total Items: {order?.items?.length}
-        </p>
-        <p className="text-sm text-gray-600">
           Shipping to: {order?.address?.country}, {order?.address?.state},{" "}
           {order?.address?.city}, {order?.address?.street},{" "}
           {order?.address?.zipcode}
